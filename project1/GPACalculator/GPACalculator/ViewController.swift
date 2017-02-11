@@ -28,12 +28,27 @@ class ViewController: UIViewController {
     @IBOutlet weak var course4TextField: UILabel!
     @IBOutlet weak var gpaTextField: UILabel!
     
+    @IBOutlet weak var deleteCourseButton: UIButton!
     @IBOutlet weak var deleteCourseIdTextField: UITextField!
+    
+    var courseTextFields = [UILabel?]()
+
     var student = Student()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        courseTextFields.append(course1TextField)
+        courseTextFields.append(course2TextField)
+        courseTextFields.append(course3TextField)
+        courseTextFields.append(course4TextField)
+        
+        // We start with text here so that the text areas are visible when we are building the layout
+        // Just to ease initial development
+        self.renderChalkboard()
+
+        deleteCourseButton.isEnabled = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,26 +77,75 @@ class ViewController: UIViewController {
             if let err = course.validate() {
                 self.errorAlert(err)
             } else {
-                if !self.student.addCourse(course) {
-                    self.errorAlert("A maximum of 4 classes can be added.")
+                if (self.student.courses.contains(where: {$0.name == course.name})) {
+                    self.errorAlert("\(course.name) has already been added.")
                 } else {
-                    print(course.getPercentageGrade())
+                    if !self.student.addCourse(course) {
+                        self.errorAlert("A maximum of 4 classes can be added.")
+                    } else {
+                        print(course.getPercentageGrade())
+                    }
                 }
             }
         } else {
             self.errorAlert("Please fill in all fields.")
         }
+        
+        self.renderChalkboard();
+        
+        if student.courses.count > 0 {
+            deleteCourseButton.isEnabled = true
+        }
     }
     
     @IBAction func deleteCourse(_ sender: Any) {
         if let index = Int(self.deleteCourseIdTextField!.text!) {
-            if student.courses.count > index - 1, index > 0 {
-                student.courses.remove(at: index - 1)
+            if self.student.removeCourse(index) {
+                self.renderChalkboard();
             } else {
                 self.errorAlert("Course \(index) doesn't exist")
             }
         } else {
             self.errorAlert("Please input a course number.")
+        }
+        
+        if student.courses.count == 0 {
+            deleteCourseButton.isEnabled = false
+        }
+    }
+    
+    func renderChalkboard() {
+        for (index, textField) in self.courseTextFields.enumerated() {
+            if let field = textField {
+                if self.student.courses.count > index {
+                    let course = self.student.courses[index]
+                    field.text = "\(index + 1). \(course.name)"
+                } else {
+                    field.text = ""
+                }
+            }
+        }
+        
+        if let gpa = self.student.getGPA() {
+            gpaTextField.text = "GPA: \(gpa)"
+        } else {
+            gpaTextField.text = "GPA:"
+        }
+        
+        gpaTextField.textColor = self.getGPAColor()
+    }
+    
+    func getGPAColor() -> UIColor {
+        if let gpa = self.student.getGPA() {
+            if gpa > 3.0 {
+                return UIColor(red:0.15, green:0.68, blue:0.38, alpha:1.0)
+            } else if gpa > 2.0 {
+                return UIColor(red:0.90, green:0.49, blue:0.13, alpha:1.0)
+            } else {
+                return UIColor(red:0.91, green:0.30, blue:0.24, alpha:1.0)
+            }
+        } else {
+            return UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0)
         }
     }
     

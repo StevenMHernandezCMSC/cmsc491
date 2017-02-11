@@ -168,8 +168,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="GPA: 2.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cg3-yw-b6h">
-                                <rect key="frame" x="151" y="516" width="67" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="GPA:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cg3-yw-b6h">
+                                <rect key="frame" x="16" y="516" width="343" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -232,6 +232,7 @@
                         <outlet property="course4TextField" destination="51s-Xt-DEv" id="sbx-dS-Px4"/>
                         <outlet property="courseTitleTextField" destination="x5m-0V-kcu" id="VOJ-NV-Ldg"/>
                         <outlet property="creditsTextField" destination="YFq-eu-Oja" id="Izu-XS-3a4"/>
+                        <outlet property="deleteCourseButton" destination="Ve3-aj-mdq" id="2wG-fc-BdY"/>
                         <outlet property="deleteCourseIdTextField" destination="T0B-0N-ec5" id="IvT-m0-xcJ"/>
                         <outlet property="finalMaxTextField" destination="91W-Ph-QxX" id="BEN-m0-Pum"/>
                         <outlet property="finalPercentageTextField" destination="mnH-MO-Zhu" id="fiA-6j-HRh"/>

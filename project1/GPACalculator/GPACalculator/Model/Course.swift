@@ -46,20 +46,28 @@ class Course {
     func getPercentageGrade() -> Double {
         return self.assignments.getWeight() + self.midterm.getWeight() + self.final.getWeight()
     }
-
-    func getLetterGrade() -> Character {
+    
+    func getGradePoints() -> Int {
+        return self.credits * self.getGradeValue()
+    }
+    
+    func getGradeValue() -> Int {
         let percentage = self.getPercentageGrade()
-
+        
         if percentage >= 90 {
-            return "A"
+            return 4
         } else if percentage >= 80 {
-            return "B"
+            return 3
         } else if percentage >= 70 {
-            return "C"
+            return 2
         } else if percentage >= 60 {
-            return "D"
+            return 1
         } else {
-            return "F"
+            return 0
         }
+    }
+    
+    func getLetterGrade() -> Character {
+        return ["F", "D", "C", "B", "A"][self.getGradeValue()]
     }
 }
