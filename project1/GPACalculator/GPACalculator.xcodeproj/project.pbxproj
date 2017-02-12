@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B00B421B1E4A477E00181A03 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00B421A1E4A477E00181A03 /* Course.swift */; };
+		B02EC51C1E50AF110006D65D /* EraserRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B02EC51B1E50A69D0006D65D /* EraserRegular.ttf */; };
 		B07275E31E4CE07300C8858F /* Student.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07275E21E4CE07300C8858F /* Student.swift */; };
 		B0ABC2841E4A3D3B00669760 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0ABC2831E4A3D3B00669760 /* AppDelegate.swift */; };
 		B0ABC2861E4A3D3B00669760 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0ABC2851E4A3D3B00669760 /* ViewController.swift */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		B00B421A1E4A477E00181A03 /* Course.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Course.swift; path = Model/Course.swift; sourceTree = "<group>"; };
+		B02EC51B1E50A69D0006D65D /* EraserRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = EraserRegular.ttf; path = ../EraserRegular.ttf; sourceTree = "<group>"; };
 		B07275E21E4CE07300C8858F /* Student.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Student.swift; path = Model/Student.swift; sourceTree = "<group>"; };
 		B0ABC2801E4A3D3B00669760 /* GPACalculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GPACalculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0ABC2831E4A3D3B00669760 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				B0ABC2851E4A3D3B00669760 /* ViewController.swift */,
 				B0ABC2871E4A3D3B00669760 /* Main.storyboard */,
 				B0ABC28A1E4A3D3B00669760 /* Assets.xcassets */,
+				B02EC51B1E50A69D0006D65D /* EraserRegular.ttf */,
 				B0ABC28C1E4A3D3B00669760 /* LaunchScreen.storyboard */,
 				B0ABC28F1E4A3D3B00669760 /* Info.plist */,
 			);
@@ -141,6 +144,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B02EC51C1E50AF110006D65D /* EraserRegular.ttf in Resources */,
 				B0ABC28E1E4A3D3B00669760 /* LaunchScreen.storyboard in Resources */,
 				B0ABC28B1E4A3D3B00669760 /* Assets.xcassets in Resources */,
 				B0ABC2891E4A3D3B00669760 /* Main.storyboard in Resources */,
@@ -281,6 +285,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 8B4QBLLSCD;
 				INFOPLIST_FILE = GPACalculator/Info.plist;
@@ -295,6 +300,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 8B4QBLLSCD;
 				INFOPLIST_FILE = GPACalculator/Info.plist;
