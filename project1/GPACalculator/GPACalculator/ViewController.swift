@@ -26,12 +26,17 @@ class ViewController: UIViewController {
     @IBOutlet weak var course2TextField: UILabel!
     @IBOutlet weak var course3TextField: UILabel!
     @IBOutlet weak var course4TextField: UILabel!
+    @IBOutlet weak var course1ImageView: UIImageView!
+    @IBOutlet weak var course2ImageView: UIImageView!
+    @IBOutlet weak var course3ImageView: UIImageView!
+    @IBOutlet weak var course4ImageView: UIImageView!
     @IBOutlet weak var gpaTextField: UILabel!
     
     @IBOutlet weak var deleteCourseButton: UIButton!
     @IBOutlet weak var deleteCourseIdTextField: UITextField!
     
     var courseTextFields = [UILabel?]()
+    var courseImageFields = [UIImageView?]()
 
     var student = Student()
 
@@ -43,6 +48,11 @@ class ViewController: UIViewController {
         courseTextFields.append(course2TextField)
         courseTextFields.append(course3TextField)
         courseTextFields.append(course4TextField)
+
+        courseImageFields.append(course1ImageView)
+        courseImageFields.append(course2ImageView)
+        courseImageFields.append(course3ImageView)
+        courseImageFields.append(course4ImageView)
         
         // We start with text here so that the text areas are visible when we are building the layout
         // Just to ease initial development
@@ -120,8 +130,12 @@ class ViewController: UIViewController {
                 if self.student.courses.count > index {
                     let course = self.student.courses[index]
                     field.text = "\(index + 1). \(course.name)"
+                    
+                    self.courseImageFields[index]?.image = self.getGradeImage(course)
+                    self.courseImageFields[index]?.isHidden = false
                 } else {
                     field.text = ""
+                    self.courseImageFields[index]?.isHidden = true
                 }
             }
         }
@@ -147,6 +161,12 @@ class ViewController: UIViewController {
         } else {
             return UIColor(red:0.93, green:0.94, blue:0.95, alpha:1.0)
         }
+    }
+    
+    func getGradeImage(_ course: Course) -> UIImage {
+        let index = course.getGradeValue()
+        let imageName = ["grade_f", "grade_d", "grade_c", "grade_b", "grade_a"][index]
+        return UIImage(named: imageName)!
     }
     
     func errorAlert(_ message: String) {
