@@ -92,8 +92,6 @@ class ViewController: UIViewController {
                 } else {
                     if !self.student.addCourse(course) {
                         self.errorAlert("A maximum of 4 classes can be added.")
-                    } else {
-                        print(course.getPercentageGrade())
                     }
                 }
             }
