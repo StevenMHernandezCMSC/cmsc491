@@ -7,7 +7,19 @@
 //
 
 import Foundation
+import PhotosUI
 
-enum Category: String {
-    case grocery, clothing, movies, garden, electronics, books, appliances, toys
+class Category {
+    var title: String
+    var image: UIImage
+    var items = [Item]()
+    
+    init(_ title: String, _ image: UIImage) {
+        self.title = title
+        self.image = image
+    }
+    
+    func addItem(_ item: Item) {
+        self.items.append(item)
+    }
 }

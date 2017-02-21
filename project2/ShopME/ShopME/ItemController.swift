@@ -19,15 +19,16 @@ class ItemController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     var selectImage:UIImage?
     
+    // TODO, we need to receive the store
     var pickOption = [
-        Category.grocery,
-        Category.clothing,
-        Category.movies,
-        Category.garden,
-        Category.electronics,
-        Category.books,
-        Category.appliances,
-        Category.toys,
+        "grocery",
+        "clothing",
+        "movies",
+        "garden",
+        "electronics",
+        "books",
+        "appliances",
+        "toys",
     ]
     
     var picker = UIPickerView()
@@ -87,9 +88,9 @@ class ItemController: UIViewController, UIImagePickerControllerDelegate, UINavig
            let image = self.selectImage {
             if let priceDouble = Double(price) {
                 let cents = Int(priceDouble * 100)
-                var item = Item(name, description, cents, image, Category(rawValue: category)!)
+                var item = Item(name, description, cents, image)
                 
-                // TODO: add item to Store
+                // TODO: add item to Store category
                 
                 // TODO: return to previous view
             } else {
@@ -129,11 +130,11 @@ class ItemController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return self.pickOption[row].rawValue.capitalized
+        return self.pickOption[row].capitalized
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        self.categoryTextField.text = pickOption[row].rawValue.capitalized
+        self.categoryTextField.text = pickOption[row].capitalized
     }
 
     func donePicker (sender:UIBarButtonItem)

@@ -13,7 +13,6 @@ class Item {
     var name: String
     var description: String
     var image: UIImage
-    var category: Category
     var priceCents: Int // never use doubles to store money
     
     var price: Double {
@@ -21,19 +20,17 @@ class Item {
         set { self.priceCents = Int(newValue * 100) }
     }
     
-    init(_ name:String, _ description:String, _ price:Int, _ image:UIImage, _ category:Category) {
+    init(_ name:String, _ description:String, _ price:Int, _ image:UIImage) {
         self.name = name
         self.description = description
         self.image = image
-        self.category = category
         self.priceCents = price
     }
     
-    init(_ name:String, _ description:String, _ price:Double, _ image:UIImage, _ category:Category) {
+    init(_ name:String, _ description:String, _ price:Double, _ image:UIImage) {
         self.name = name
         self.description = description
         self.image = image
-        self.category = category
         self.priceCents = 0
         self.price = price
     }
