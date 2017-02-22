@@ -24,6 +24,8 @@
 		B072B6A61E58E7C900C2E1EE /* ItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B072B6A51E58E7C900C2E1EE /* ItemController.swift */; };
 		B072B6AF1E5BE53600C2E1EE /* CategoryTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B072B6AD1E5BE53600C2E1EE /* CategoryTableCell.swift */; };
 		B072B6B01E5BE53600C2E1EE /* MenuItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B072B6AE1E5BE53600C2E1EE /* MenuItemCell.swift */; };
+		B0FD95651E5D2D8100113752 /* OrderItemTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FD95641E5D2D8100113752 /* OrderItemTableCell.swift */; };
+		B0FD95671E5D2D9800113752 /* OrderTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FD95661E5D2D9800113752 /* OrderTableCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +48,8 @@
 		B072B6A51E58E7C900C2E1EE /* ItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemController.swift; sourceTree = "<group>"; };
 		B072B6AD1E5BE53600C2E1EE /* CategoryTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryTableCell.swift; sourceTree = "<group>"; };
 		B072B6AE1E5BE53600C2E1EE /* MenuItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuItemCell.swift; path = ../MenuItemCell.swift; sourceTree = "<group>"; };
+		B0FD95641E5D2D8100113752 /* OrderItemTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderItemTableCell.swift; sourceTree = "<group>"; };
+		B0FD95661E5D2D9800113752 /* OrderTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderTableCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +116,8 @@
 			children = (
 				B072B6AD1E5BE53600C2E1EE /* CategoryTableCell.swift */,
 				B072B6AE1E5BE53600C2E1EE /* MenuItemCell.swift */,
+				B0FD95641E5D2D8100113752 /* OrderItemTableCell.swift */,
+				B0FD95661E5D2D9800113752 /* OrderTableCell.swift */,
 			);
 			path = UICells;
 			sourceTree = "<group>";
@@ -192,12 +198,14 @@
 				B06CFD011E58B9CE00FB9AF8 /* Item.swift in Sources */,
 				B072B6B01E5BE53600C2E1EE /* MenuItemCell.swift in Sources */,
 				B06CFCF11E58AC8F00FB9AF8 /* MenuController.swift in Sources */,
+				B0FD95671E5D2D9800113752 /* OrderTableCell.swift in Sources */,
 				B06CFD0A1E58C66B00FB9AF8 /* OrderItem.swift in Sources */,
 				B072B6551E58DA0200C2E1EE /* Store.swift in Sources */,
 				B06CFD081E58BEEC00FB9AF8 /* User.swift in Sources */,
 				B06CFD061E58BBB400FB9AF8 /* Order.swift in Sources */,
 				B06CFCEF1E58AC8F00FB9AF8 /* AppDelegate.swift in Sources */,
 				B072B6A61E58E7C900C2E1EE /* ItemController.swift in Sources */,
+				B0FD95651E5D2D8100113752 /* OrderItemTableCell.swift in Sources */,
 				B072B6A01E58E6E800C2E1EE /* CartController.swift in Sources */,
 				B06CFD041E58BA5800FB9AF8 /* Category.swift in Sources */,
 				B072B6A21E58E6FA00C2E1EE /* OrdersController.swift in Sources */,

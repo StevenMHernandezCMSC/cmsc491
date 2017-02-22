@@ -19,4 +19,10 @@ class OrderItem {
     func getCost() -> Int {
         return item.priceCents * quantity
     }
+    
+    func priceFormatted() -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        return formatter.string(from: NSNumber(value: (Double(self.getCost()) / 100)))!
+    }
 }

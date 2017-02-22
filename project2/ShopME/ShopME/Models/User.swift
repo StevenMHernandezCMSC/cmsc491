@@ -17,7 +17,7 @@ class User {
     }
     
     func placeOrder() {
-        currentOrder.purchaseDate = NSDate()
+        currentOrder.purchaseDate = Date()
         previousOrders.append(currentOrder)
         currentOrder = Order()
     }

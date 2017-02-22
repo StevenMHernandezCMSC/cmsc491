@@ -36,16 +36,17 @@ class OrdersController: UITableViewController {
         // #warning Incomplete implementation, return the number of rows
         return 0
     }
-
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "orderCell", for: indexPath) as! OrderTableCell
+        
+        let order = user.previousOrders[indexPath.item]
+        
+        cell.orderInfoLabel?.text = "\(order.getItemCount()) items \(order.totalFormatted())"
+        cell.dateLabel?.text = DateFormatter().string(from: order.purchaseDate!)
+        
         return cell
     }
-    */
 
     /*
     // Override to support conditional editing of the table view.

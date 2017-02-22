@@ -46,9 +46,9 @@ class MenuController: UIViewController, UICollectionViewDataSource, UICollection
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.item == 0 {
-            // TODO: jump to "recent orders page"
+            performSegue(withIdentifier: "ordersShow", sender: self)
         } else if indexPath.item == 1 {
-            // TODO: jump to "cart page"
+            performSegue(withIdentifier: "currentOrderShow", sender: self)
         } else {
             performSegue(withIdentifier: "showCategory", sender: store.categories[indexPath.item - 2])
         }
