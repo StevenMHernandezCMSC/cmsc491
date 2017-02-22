@@ -20,6 +20,12 @@ class Item {
         set { self.priceCents = Int(newValue * 100) }
     }
     
+    func priceFormatted() -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        return formatter.string(from: NSNumber(value: (Double(self.priceCents) / 100)))!
+    }
+    
     init(_ name:String, _ description:String, _ price:Int, _ image:UIImage) {
         self.name = name
         self.description = description

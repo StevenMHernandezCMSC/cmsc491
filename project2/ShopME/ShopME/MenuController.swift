@@ -8,11 +8,11 @@
 
 import UIKit
 
+// TODO: handle global variables better
+var store = Store()
+var user = User()
+
 class MenuController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
-    // TODO: this will need to share between views
-    var store = Store()
-    var user = User()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -24,7 +24,7 @@ class MenuController: UIViewController, UICollectionViewDataSource, UICollection
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.store.categories.count + 2
+        return store.categories.count + 2
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -37,8 +37,8 @@ class MenuController: UIViewController, UICollectionViewDataSource, UICollection
             cell.title.text = "Cart"
             cell.icon.image = #imageLiteral(resourceName: "category-2-cart")
         } else {
-            cell.title.text = self.store.categories[indexPath.item - 2].title
-            cell.icon.image = self.store.categories[indexPath.item - 2].image
+            cell.title.text = store.categories[indexPath.item - 2].title
+            cell.icon.image = store.categories[indexPath.item - 2].image
         }
         
         return cell
@@ -50,7 +50,15 @@ class MenuController: UIViewController, UICollectionViewDataSource, UICollection
         } else if indexPath.item == 1 {
             // TODO: jump to "cart page"
         } else {
-            // TODO: jump to "categories page" with category: (indexPath.item - 2)
+            performSegue(withIdentifier: "showCategory", sender: store.categories[indexPath.item - 2])
+        }
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showCategory"{
+            if let destinationVC = segue.destination as? CategoryController {
+                destinationVC.category = sender as? Category
+            }
         }
     }
 }

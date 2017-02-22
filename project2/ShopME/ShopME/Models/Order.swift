@@ -25,4 +25,17 @@ class Order {
 
         return Double(total / 100)
     }
+    
+    func addItem(_ newItem: Item) {
+        for orderItem in items {
+            // TODO: use ids instead of names
+            if orderItem.item.name == newItem.name {
+                orderItem.quantity += 1
+                print("found \(orderItem.quantity)")
+                return
+            }
+        }
+        
+        items.append(OrderItem(item: newItem))
+    }
 }

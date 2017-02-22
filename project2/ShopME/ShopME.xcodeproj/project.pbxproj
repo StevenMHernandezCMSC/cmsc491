@@ -22,7 +22,8 @@
 		B072B6A01E58E6E800C2E1EE /* CartController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B072B69F1E58E6E800C2E1EE /* CartController.swift */; };
 		B072B6A21E58E6FA00C2E1EE /* OrdersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B072B6A11E58E6FA00C2E1EE /* OrdersController.swift */; };
 		B072B6A61E58E7C900C2E1EE /* ItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B072B6A51E58E7C900C2E1EE /* ItemController.swift */; };
-		B072B6A81E5A99F600C2E1EE /* MenuItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B072B6A71E5A99F600C2E1EE /* MenuItemCell.swift */; };
+		B072B6AF1E5BE53600C2E1EE /* CategoryTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B072B6AD1E5BE53600C2E1EE /* CategoryTableCell.swift */; };
+		B072B6B01E5BE53600C2E1EE /* MenuItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B072B6AE1E5BE53600C2E1EE /* MenuItemCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,7 +44,8 @@
 		B072B69F1E58E6E800C2E1EE /* CartController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartController.swift; sourceTree = "<group>"; };
 		B072B6A11E58E6FA00C2E1EE /* OrdersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrdersController.swift; sourceTree = "<group>"; };
 		B072B6A51E58E7C900C2E1EE /* ItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemController.swift; sourceTree = "<group>"; };
-		B072B6A71E5A99F600C2E1EE /* MenuItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuItemCell.swift; sourceTree = "<group>"; };
+		B072B6AD1E5BE53600C2E1EE /* CategoryTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryTableCell.swift; sourceTree = "<group>"; };
+		B072B6AE1E5BE53600C2E1EE /* MenuItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuItemCell.swift; path = ../MenuItemCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,9 +78,9 @@
 		B06CFCED1E58AC8F00FB9AF8 /* ShopME */ = {
 			isa = PBXGroup;
 			children = (
+				B072B6AC1E5BE53600C2E1EE /* UICells */,
 				B06CFD021E58B9D500FB9AF8 /* Models */,
 				B06CFCEE1E58AC8F00FB9AF8 /* AppDelegate.swift */,
-				B072B6A71E5A99F600C2E1EE /* MenuItemCell.swift */,
 				B06CFCF01E58AC8F00FB9AF8 /* MenuController.swift */,
 				B072B69D1E58E68400C2E1EE /* CategoryController.swift */,
 				B072B69F1E58E6E800C2E1EE /* CartController.swift */,
@@ -103,6 +105,15 @@
 				B072B6541E58DA0200C2E1EE /* Store.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		B072B6AC1E5BE53600C2E1EE /* UICells */ = {
+			isa = PBXGroup;
+			children = (
+				B072B6AD1E5BE53600C2E1EE /* CategoryTableCell.swift */,
+				B072B6AE1E5BE53600C2E1EE /* MenuItemCell.swift */,
+			);
+			path = UICells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -179,18 +190,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				B06CFD011E58B9CE00FB9AF8 /* Item.swift in Sources */,
+				B072B6B01E5BE53600C2E1EE /* MenuItemCell.swift in Sources */,
 				B06CFCF11E58AC8F00FB9AF8 /* MenuController.swift in Sources */,
 				B06CFD0A1E58C66B00FB9AF8 /* OrderItem.swift in Sources */,
 				B072B6551E58DA0200C2E1EE /* Store.swift in Sources */,
 				B06CFD081E58BEEC00FB9AF8 /* User.swift in Sources */,
 				B06CFD061E58BBB400FB9AF8 /* Order.swift in Sources */,
 				B06CFCEF1E58AC8F00FB9AF8 /* AppDelegate.swift in Sources */,
-				B072B6A81E5A99F600C2E1EE /* MenuItemCell.swift in Sources */,
 				B072B6A61E58E7C900C2E1EE /* ItemController.swift in Sources */,
 				B072B6A01E58E6E800C2E1EE /* CartController.swift in Sources */,
 				B06CFD041E58BA5800FB9AF8 /* Category.swift in Sources */,
 				B072B6A21E58E6FA00C2E1EE /* OrdersController.swift in Sources */,
 				B072B69E1E58E68400C2E1EE /* CategoryController.swift in Sources */,
+				B072B6AF1E5BE53600C2E1EE /* CategoryTableCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

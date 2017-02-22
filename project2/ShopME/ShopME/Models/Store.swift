@@ -20,7 +20,7 @@ class Store {
         grocery.addItem(Item("Tomato, per lb", "On the vine", 245, #imageLiteral(resourceName: "grocery-1-tomatoes")))
         grocery.addItem(Item("Banana, per lb", "Very durable(??)", 0.49, #imageLiteral(resourceName: "grocery-2-bananas")))
         grocery.addItem(Item("Apple", "Gala apples", 140, #imageLiteral(resourceName: "grocery-3-gala")))
-        grocery.addItem(Item("Lettuce", "Green leaf lettuce", 3.19, #imageLiteral(resourceName: "grocery-4-lettuce")))
+        grocery.addItem(Item("Lettuce", "Green\nleaf\nlettuce", 3.19, #imageLiteral(resourceName: "grocery-4-lettuce")))
         grocery.addItem(Item("Broccoli", "Bunch", 1.99, #imageLiteral(resourceName: "grocery-5-broccoli")))
         grocery.addItem(Item("Milk", "One box, organic", 4.49, #imageLiteral(resourceName: "grocery-6-milk")))
         movies.addItem(Item("Lord of the Rings", "Never seen it.", 1.99, #imageLiteral(resourceName: "movies-2-lord-of-the-rings")))
