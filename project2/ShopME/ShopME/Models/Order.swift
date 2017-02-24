@@ -13,7 +13,13 @@ class Order {
     var purchaseDate:Date?
     
     func getItemCount() -> Int {
-        return self.items.count
+        var total = 0
+        
+        items.forEach { (orderItem) in
+            total += orderItem.quantity
+        }
+        
+        return total
     }
     
     func getTotal() -> Double {
@@ -29,7 +35,7 @@ class Order {
     func totalFormatted() -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        return formatter.string(from: NSNumber(value: (Double(self.getTotal()) / 100)))!
+        return formatter.string(from: NSNumber(value: self.getTotal()))!
     }
     
     func addItem(_ newItem: Item) {

@@ -14,6 +14,19 @@ class User {
 
     init () {
         self.currentOrder = Order()
+
+        // TODO: remove
+        self.currentOrder.addItem(store.categories[0].items[0])
+        
+        var exampleOrder = Order();
+        exampleOrder.addItem(store.categories[0].items[0])
+        exampleOrder.purchaseDate = Date()
+        
+        // TODO: remove
+        print(exampleOrder.items[0])
+        print(exampleOrder.purchaseDate)
+        
+        self.previousOrders.append(exampleOrder)
     }
     
     func placeOrder() {

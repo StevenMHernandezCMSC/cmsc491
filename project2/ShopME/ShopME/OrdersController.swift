@@ -9,88 +9,67 @@
 import UIKit
 
 class OrdersController: UITableViewController {
+    
+    var editMode = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
+        self.renderRightBarButtonItem();
+    }
+    
+    func toggleEditMode() {
+        self.editMode = !self.editMode;
+        
+        self.renderRightBarButtonItem();
+        
+        // hide delete button if it happens to be showing
+        self.tableView!.reloadData()
+    }
+    
+    func renderRightBarButtonItem() {
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: self.editMode ? "Done" : "Edit", style: .plain, target: self, action: #selector(toggleEditMode))
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
-
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return user.previousOrders.count > 10 ? 10 : user.previousOrders.count
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "orderCell", for: indexPath) as! OrderTableCell
-        
+
         let order = user.previousOrders[indexPath.item]
         
-        cell.orderInfoLabel?.text = "\(order.getItemCount()) items \(order.totalFormatted())"
-        cell.dateLabel?.text = DateFormatter().string(from: order.purchaseDate!)
-        
+        for i in order.items {
+            print(i.quantity)
+            print(i.item.price)
+        }
+
+        cell.orderInfoLabel?.text = "\(order.getItemCount()) items (\(order.totalFormatted()))"
+
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "MMM/dd, E, h:mm a"
+        cell.dateLabel?.text = dateformatter.string(from: order.purchaseDate!)
+
         return cell
     }
 
-    /*
-    // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+        return editMode
     }
-    */
 
-    /*
-    // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+            user.previousOrders.remove(at: indexPath.item)
+            tableView.reloadData()
+        }
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
