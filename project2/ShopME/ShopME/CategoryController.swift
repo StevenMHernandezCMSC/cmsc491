@@ -22,6 +22,8 @@ class CategoryController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: String(user.currentOrder.getItemCount()), style: .plain, target: self, action: #selector(showCart))
         
         navigationItem.rightBarButtonItem?.setBackgroundImage(#imageLiteral(resourceName: "cart_sm"), for: .normal, barMetrics: .default)
+
+        self.tableView.reloadData()
     }
     
     func showCart() {

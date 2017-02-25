@@ -13,8 +13,20 @@ var store = Store()
 var user = User()
 
 class MenuController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+    @IBOutlet var collection: UICollectionView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Manager", style: .plain, target: self, action: #selector(addImage))
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.collection.reloadData()
+    }
+    
+    func addImage() {
+        performSegue(withIdentifier: "itemAdd", sender: self)
     }
 
     override func didReceiveMemoryWarning() {

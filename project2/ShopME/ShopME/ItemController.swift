@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ItemController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class ItemController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, CategoryCreateControllerDelegate {
 
     @IBOutlet weak var addImageButton: UIButton!
     @IBOutlet weak var itemImageView: UIImageView!
@@ -19,22 +19,12 @@ class ItemController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     var selectImage:UIImage?
     
-    // TODO, we need to receive the store
-    var pickOption = [
-        "grocery",
-        "clothing",
-        "movies",
-        "garden",
-        "electronics",
-        "books",
-        "appliances",
-        "toys",
-    ]
-    
     var picker = UIPickerView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.title = "Add Product"
 
         // Do any additional setup after loading the view.
 
@@ -71,7 +61,7 @@ class ItemController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 
     @IBAction func onCancel(_ sender: Any) {
-        // TODO: return to previous view
+        _ = self.navigationController?.popViewController(animated: true)
     }
 
     @IBAction func onSave(_ sender: Any) {
@@ -86,11 +76,15 @@ class ItemController: UIViewController, UIImagePickerControllerDelegate, UINavig
            let image = self.selectImage {
             if let priceDouble = Double(price) {
                 let cents = Int(priceDouble * 100)
-                var item = Item(name, description, cents, image)
+                let item = Item(name, description, cents, image)
                 
-                // TODO: add item to Store category
+                for c in store.categories {
+                    if (c.title.lowercased() == category.lowercased()) {
+                        c.items.insert(item, at: 0)
+                    }
+                }
                 
-                // TODO: return to previous view
+                _ = self.navigationController?.popViewController(animated: true)
             } else {
                 self.errorAlert("There was an error reading price")
             }
@@ -124,15 +118,15 @@ class ItemController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return self.pickOption.count
+        return store.categories.count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return self.pickOption[row].capitalized
+        return store.categories[row].title.capitalized
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        self.categoryTextField.text = pickOption[row].capitalized
+        self.categoryTextField.text = store.categories[row].title.capitalized
     }
 
     func donePicker (sender:UIBarButtonItem)
@@ -144,14 +138,20 @@ class ItemController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.categoryTextField.endEditing(true)
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    @IBAction func newCategory(_ sender: Any) {
+        performSegue(withIdentifier: "categoryCreate", sender: self)
     }
-    */
 
+    func categoryCreateControllerResponse(category: Category)
+    {
+        self.categoryTextField.text = category.title
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "categoryCreate"{
+            if let destinationVC = segue.destination as? CategoryCreateController {
+                destinationVC.delegate = self
+            }
+        }
+    }
 }
