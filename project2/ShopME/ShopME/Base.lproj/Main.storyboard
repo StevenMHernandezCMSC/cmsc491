@@ -257,8 +257,8 @@
                                                 <constraint firstAttribute="width" constant="83" id="8iz-AS-Pfr"/>
                                             </constraints>
                                         </imageView>
-                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EnI-mJ-xhU">
-                                            <rect key="frame" x="281" y="34" width="39" height="30"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EnI-mJ-xhU">
+                                            <rect key="frame" x="321" y="34" width="30" height="30"/>
                                             <state key="normal" title="+"/>
                                             <connections>
                                                 <action selector="addItemPressed:" destination="kst-xI-t9F" eventType="touchUpInside" id="Sl0-Ng-24B"/>
@@ -686,6 +686,6 @@
         <image name="category-1-recent" width="297" height="299"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="d0w-4v-KEA"/>
+        <segue reference="KUy-oB-ZQW"/>
     </inferredMetricsTieBreakers>
 </document>

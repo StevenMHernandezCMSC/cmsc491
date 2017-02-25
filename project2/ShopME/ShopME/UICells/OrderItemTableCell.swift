@@ -14,6 +14,8 @@ class OrderItemTableCell: UITableViewCell {
     @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var decreaseButton: UIButton!
     @IBOutlet weak var increaseButton: UIButton!
+    
+    var categoryName: String? = nil
 
     override func awakeFromNib() {
         super.awakeFromNib()

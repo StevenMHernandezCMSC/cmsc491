@@ -9,24 +9,42 @@
 import Foundation
 
 class Order {
-    var items = [OrderItem]()
+    var items = [String: [OrderItem]]()
     var purchaseDate:Date?
     
     func getItemCount() -> Int {
         var total = 0
         
-        items.forEach { (orderItem) in
-            total += orderItem.quantity
+        for category in items {
+            for orderItem in category.value {
+                total += orderItem.quantity
+            }
         }
         
         return total
     }
     
+    func getCategoryName(_ index: Int) -> String {
+        return Array(user.currentOrder.items.keys)[index]
+    }
+    
+    func getItemsInCategory(_ index: Int) -> [OrderItem]? {
+        let categoryName = self.getCategoryName(index)
+        
+        return self.getItemsInCategory(categoryName)
+    }
+    
+    func getItemsInCategory(_ categoryName: String) -> [OrderItem]? {
+        return user.currentOrder.items[categoryName]
+    }
+    
     func getTotal() -> Int {
         var total = 0
-
-        items.forEach { (orderItem) in
-            total += orderItem.getCost()
+        
+        for category in items {
+            for orderItem in category.value {
+                total += orderItem.getCost()
+            }
         }
 
         return total
@@ -38,27 +56,35 @@ class Order {
         return formatter.string(from: NSNumber(value: Double(self.getTotal()) / 100))!
     }
     
-    func addItem(_ newItem: Item) {
-        for orderItem in items {
-            // TODO: use ids instead of names
-            if orderItem.item.name == newItem.name {
-                orderItem.quantity += 1
-                return
+    func addItem(_ newItem: Item, categoryName: String) {
+        if let c = items[categoryName] {
+            for orderItem in c {
+                // TODO: use ids instead of names
+                if orderItem.item.name == newItem.name {
+                    orderItem.quantity += 1
+                    return
+                }
             }
+        } else {
+            items[categoryName] = [OrderItem]()
         }
         
-        items.append(OrderItem(item: newItem))
+        items[categoryName]!.append(OrderItem(item: newItem))
     }
     
-    func increment(at index: Int) {
-        items[index].quantity += 1
+    func increment(category: String, at index: Int) {
+        items[category]?[index].quantity += 1
     }
     
-    func decrement(at index: Int) {
-        items[index].quantity -= 1
+    func decrement(category: String, at index: Int) {
+        items[category]?[index].quantity -= 1
         
-        if items[index].quantity <= 0 {
-            items.remove(at: index)
+        if (items[category]?[index].quantity)! <= 0 {
+            items[category]?.remove(at: index)
+            
+            if ((items[category]?.count)! <= 0) {
+                items.removeValue(forKey: category)
+            }
         }
     }
 }

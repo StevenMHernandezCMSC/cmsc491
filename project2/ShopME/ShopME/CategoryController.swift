@@ -19,14 +19,12 @@ class CategoryController: UITableViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: String(user.currentOrder.getItemCount()), style: .plain, target: self, action: #selector(showCart))
-        
-        navigationItem.rightBarButtonItem?.setBackgroundImage(#imageLiteral(resourceName: "cart_sm"), for: .normal, barMetrics: .default)
+        self.renderCartButton()
 
         self.tableView.reloadData()
     }
     
-    func showCart() {
+    func showCart(sender: UITapGestureRecognizer) {
         performSegue(withIdentifier: "showCart", sender: self)
     }
 
@@ -57,8 +55,27 @@ class CategoryController: UITableViewController {
     }
 
     @IBAction func addItemPressed(_ sender: Any) {
-        user.currentOrder.addItem(category!.items[(sender as! UIButton).tag])
+        user.currentOrder.addItem(category!.items[(sender as! UIButton).tag], categoryName: (self.category?.title)!)
+        self.renderCartButton()
+    }
+    
+    func renderCartButton() {
+        let containView = UIView(frame: CGRect(x: 0, y: 0, width: 70, height: 40))
         
-        navigationItem.rightBarButtonItem?.title = String(user.currentOrder.getItemCount())
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(showCart))
+        containView.addGestureRecognizer(gesture)
+        
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 50, height: 40))
+        label.text = String(user.currentOrder.getItemCount())
+        label.textAlignment = NSTextAlignment.center
+        
+        containView.addSubview(label)
+        
+        let imageview = UIImageView(frame: CGRect(x: 50, y: 10, width: 20, height: 20))
+        imageview.image = #imageLiteral(resourceName: "cart")
+        imageview.contentMode = UIViewContentMode.scaleAspectFill
+        containView.addSubview(imageview)
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: containView)
     }
 }

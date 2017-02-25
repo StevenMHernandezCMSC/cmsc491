@@ -19,10 +19,10 @@ class CartController: UITableViewController {
         
         self.loadCartInformation()
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Menu", style: .plain, target: self, action: #selector(goHome))
+        self.renderHomeButton()
     }
     
-    func goHome() {
+    func goHome(sender: UITapGestureRecognizer) {
         _ = navigationController?.popToRootViewController(animated: true)
     }
     
@@ -36,25 +36,29 @@ class CartController: UITableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // TODO: category count
-        return 1
+        return user.currentOrder.items.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return user.currentOrder.items.count
+        return user.currentOrder.getItemsInCategory(section)!.count
+    }
+
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return user.currentOrder.getCategoryName(section)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "orderItemCell", for: indexPath) as! OrderItemTableCell
         
-        let orderItem = user.currentOrder.items[indexPath.item]
+        let orderItem = user.currentOrder.getItemsInCategory(indexPath.section)![indexPath.item]
         
         cell.titleLabel?.text = orderItem.item.name
         cell.priceLabel?.text = orderItem.priceFormatted()
         cell.quantityLabel.text = String(orderItem.quantity)
         cell.decreaseButton.tag = indexPath.item
         cell.increaseButton.tag = indexPath.item
-        
+        cell.categoryName = user.currentOrder.getCategoryName(indexPath.section)
+
         return cell
     }
     
@@ -64,12 +68,15 @@ class CartController: UITableViewController {
     }
 
     @IBAction func decreaseQuantityPressed(_ sender: Any) {
-        user.currentOrder.decrement(at: (sender as! UIButton).tag)
+        let cell = ((sender as! UIButton).superview!.superview as! OrderItemTableCell)
+        user.currentOrder.decrement(category: cell.categoryName!, at: (sender as! UIButton).tag)
+        
         self.reload()
     }
 
     @IBAction func increaseQuantityPressed(_ sender: Any) {
-        user.currentOrder.increment(at: (sender as! UIButton).tag)
+        let cell = ((sender as! UIButton).superview!.superview as! OrderItemTableCell)
+        user.currentOrder.increment(category: cell.categoryName!, at: (sender as! UIButton).tag)
         self.reload()
     }
 
@@ -98,6 +105,20 @@ class CartController: UITableViewController {
         user.placeOrder()
         
         _ = navigationController?.popToRootViewController(animated: true)
+    }
+    
+    func renderHomeButton() {
+        let containView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 40))
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(goHome))
+        containView.addGestureRecognizer(gesture)
+        
+        let imageview = UIImageView(frame: CGRect(x: 0, y: 10, width: 20, height: 20))
+        imageview.image = #imageLiteral(resourceName: "homeButton")
+        imageview.contentMode = UIViewContentMode.scaleAspectFill
+        containView.addSubview(imageview)
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: containView)
     }
     
     func errorAlert(_ message: String) {

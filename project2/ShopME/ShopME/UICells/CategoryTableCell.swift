@@ -14,6 +14,8 @@ class CategoryTableCell: UITableViewCell {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var addButton: UIButton!
+    
+    var item: Item? = nil
 
     override func awakeFromNib() {
         super.awakeFromNib()

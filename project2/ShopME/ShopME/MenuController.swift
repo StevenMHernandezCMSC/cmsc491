@@ -19,6 +19,10 @@ class MenuController: UIViewController, UICollectionViewDataSource, UICollection
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Manager", style: .plain, target: self, action: #selector(addImage))
+        
+        let backgroundView = UIImageView(image: #imageLiteral(resourceName: "background-home"));
+        backgroundView.alpha = 0.3
+        self.collection.backgroundView = backgroundView
     }
     
     override func viewDidAppear(_ animated: Bool) {
