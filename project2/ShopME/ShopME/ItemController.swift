@@ -64,8 +64,6 @@ class ItemController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 
     @IBAction func addImagePressed(_ sender: Any) {
-        print("cliekce")
-        
         let picker = UIImagePickerController()
         picker.delegate = self
         

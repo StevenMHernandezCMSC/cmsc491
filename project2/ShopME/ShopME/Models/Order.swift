@@ -22,20 +22,20 @@ class Order {
         return total
     }
     
-    func getTotal() -> Double {
+    func getTotal() -> Int {
         var total = 0
 
         items.forEach { (orderItem) in
             total += orderItem.getCost()
         }
 
-        return Double(total / 100)
+        return total
     }
     
     func totalFormatted() -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
-        return formatter.string(from: NSNumber(value: self.getTotal()))!
+        return formatter.string(from: NSNumber(value: Double(self.getTotal()) / 100))!
     }
     
     func addItem(_ newItem: Item) {

@@ -18,20 +18,16 @@ class User {
         // TODO: remove
         self.currentOrder.addItem(store.categories[0].items[0])
         
-        var exampleOrder = Order();
+        let exampleOrder = Order();
         exampleOrder.addItem(store.categories[0].items[0])
         exampleOrder.purchaseDate = Date()
-        
-        // TODO: remove
-        print(exampleOrder.items[0])
-        print(exampleOrder.purchaseDate)
         
         self.previousOrders.append(exampleOrder)
     }
     
     func placeOrder() {
         currentOrder.purchaseDate = Date()
-        previousOrders.append(currentOrder)
+        previousOrders.insert(currentOrder, at: 0)
         currentOrder = Order()
     }
 }

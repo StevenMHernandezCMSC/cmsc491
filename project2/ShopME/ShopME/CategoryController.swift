@@ -17,6 +17,16 @@ class CategoryController: UITableViewController {
 
         self.title = category!.title
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: String(user.currentOrder.getItemCount()), style: .plain, target: self, action: #selector(showCart))
+        
+        navigationItem.rightBarButtonItem?.setBackgroundImage(#imageLiteral(resourceName: "cart_sm"), for: .normal, barMetrics: .default)
+    }
+    
+    func showCart() {
+        performSegue(withIdentifier: "showCart", sender: self)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -46,5 +56,7 @@ class CategoryController: UITableViewController {
 
     @IBAction func addItemPressed(_ sender: Any) {
         user.currentOrder.addItem(category!.items[(sender as! UIButton).tag])
+        
+        navigationItem.rightBarButtonItem?.title = String(user.currentOrder.getItemCount())
     }
 }

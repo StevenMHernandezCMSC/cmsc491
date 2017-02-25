@@ -47,11 +47,6 @@ class OrdersController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "orderCell", for: indexPath) as! OrderTableCell
 
         let order = user.previousOrders[indexPath.item]
-        
-        for i in order.items {
-            print(i.quantity)
-            print(i.item.price)
-        }
 
         cell.orderInfoLabel?.text = "\(order.getItemCount()) items (\(order.totalFormatted()))"
 
