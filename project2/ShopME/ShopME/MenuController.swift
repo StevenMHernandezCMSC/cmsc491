@@ -17,6 +17,7 @@ class MenuController: UIViewController, UICollectionViewDataSource, UICollection
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo"))
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Manager", style: .plain, target: self, action: #selector(addImage))
         
