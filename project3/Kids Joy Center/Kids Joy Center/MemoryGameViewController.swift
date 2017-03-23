@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GameplayKit
 
 class MemoryGameViewController: UIViewController {
     
@@ -15,26 +16,58 @@ class MemoryGameViewController: UIViewController {
     var blockHeight = 100
     var blockPadding = 10
     
-    var items = [UIImageView]();
-
+    var itemViews = [UIImageView]();
+    var itemImages = [UIImage]();
+    
+    let allImages = [UIImage](arrayLiteral: #imageLiteral(resourceName: "bird"), #imageLiteral(resourceName: "cat"), #imageLiteral(resourceName: "dog"), #imageLiteral(resourceName: "gator"), #imageLiteral(resourceName: "giraffe"), #imageLiteral(resourceName: "horse"), #imageLiteral(resourceName: "lion"), #imageLiteral(resourceName: "monkey"), #imageLiteral(resourceName: "rooster"), #imageLiteral(resourceName: "zebra"));
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.view.backgroundColor = UIColor.white
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        /*
+         * reset
+         */
+        itemViews = [UIImageView]();
+        itemImages = [UIImage]();
         
-        let horizontalCount = self.difficulty == 0 ? 3 : self.difficulty == 1 ? 4 : 5
+        let horizontalCount = self.difficulty == 0 ? 3 : self.difficulty == 1 ? 4 : 5 // ugly: {3,4,5}
+        
+        print(horizontalCount * 2)
+        
+        /*
+         * determine the random set of images.
+         */
+        for n in 0...((horizontalCount * 2) - 1)  {
+            // Add two of the item
+            self.itemImages.append(self.allImages[n])
+            self.itemImages.append(self.allImages[n])
+        }
+        
+        /*
+         * randomise the set
+         */
+        self.itemImages = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: self.itemImages) as! [UIImage]
+        
+        print(self.itemImages)
+        
+        /*
+         * build the image views
+         */
         let topPadding = (768 - (4 * blockHeight) - (3 * blockPadding)) / 2
         let leftPadding = (1024 - (horizontalCount * blockHeight) - ((horizontalCount - 1) * blockPadding)) / 2
         
         for y in 0...3 {
             for x in 0...(horizontalCount - 1) {
-                print(x,y)
                 let button = UIImageView(frame: CGRect(x: leftPadding + ((blockHeight + blockPadding) * x),
                                                        y: topPadding + ((blockHeight + blockPadding) * y),
                                                        width: blockHeight, height: blockHeight));
                 
-                self.makeViewTappable(v: button, action: #selector(self.test(_:)))
-                self.items.append(button)
+                self.makeViewTappable(v: button, action: #selector(self.flip(_:)))
+                self.itemViews.append(button)
                 self.view.addSubview(button)
             }
         }
@@ -44,8 +77,11 @@ class MemoryGameViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    func test(_ sender: UITapGestureRecognizer) {
-        print(items.index(of: sender.view as! UIImageView)!)
+    func flip(_ sender: UITapGestureRecognizer) {
+        let view = sender.view as! UIImageView
+        let index = itemViews.index(of: view)!
+
+        view.image = self.itemImages[index]
     }
     
     func makeViewTappable(v: UIImageView, action: Selector?)
