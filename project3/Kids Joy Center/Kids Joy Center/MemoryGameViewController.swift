@@ -24,6 +24,8 @@ class MemoryGameViewController: UIViewController {
     
     let allImages = [UIImage](arrayLiteral: #imageLiteral(resourceName: "bird"), #imageLiteral(resourceName: "cat"), #imageLiteral(resourceName: "dog"), #imageLiteral(resourceName: "gator"), #imageLiteral(resourceName: "giraffe"), #imageLiteral(resourceName: "horse"), #imageLiteral(resourceName: "lion"), #imageLiteral(resourceName: "monkey"), #imageLiteral(resourceName: "rooster"), #imageLiteral(resourceName: "zebra"));
     
+    var scoreTimer: ScoreTimerViewController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,9 +42,18 @@ class MemoryGameViewController: UIViewController {
         itemImages = [UIImage]()
         interactionEnabled = true
         
-        let horizontalCount = self.difficulty == 0 ? 3 : self.difficulty == 1 ? 4 : 5 // ugly: {3,4,5}
+        /*
+         * add score and timer
+         */
+        scoreTimer = ScoreTimerViewController()
+        scoreTimer?.view.frame = CGRect(x: 0, y: 100, width: 1024, height: 45)
+        scoreTimer?.seconds = self.difficulty == 0 ? 120 : self.difficulty == 1 ? 105 : 90 // ugly: {120, 105, 90}
+        scoreTimer?.timerFinishedCallback = timeUp
+        scoreTimer?.seconds = 2
+        self.view.addSubview((scoreTimer?.view)!)
         
-        print(horizontalCount * 2)
+        
+        let horizontalCount = self.difficulty == 0 ? 3 : self.difficulty == 1 ? 4 : 5 // ugly: {3,4,5}
         
         /*
          * determine the random set of images.
@@ -57,8 +68,6 @@ class MemoryGameViewController: UIViewController {
          * randomise the set
          */
         self.itemImages = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: self.itemImages) as! [UIImage]
-        
-        print(self.itemImages)
         
         /*
          * build the image views
@@ -126,5 +135,58 @@ class MemoryGameViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: action)
         v.isUserInteractionEnabled = true
         v.addGestureRecognizer(tap)
+    }
+    
+    func reset() {
+        /*
+         * reset
+         */
+        itemViews = [UIImageView]()
+        itemImages = [UIImage]()
+        interactionEnabled = true
+        
+        /*
+         * add score and timer
+         */
+        scoreTimer?.seconds = self.difficulty == 0 ? 120 : self.difficulty == 1 ? 105 : 90 // ugly: {120, 105, 90}
+        scoreTimer?.score = 0
+        scoreTimer?.start()
+        
+        
+        let horizontalCount = self.difficulty == 0 ? 3 : self.difficulty == 1 ? 4 : 5 // ugly: {3,4,5}
+        
+        /*
+         * determine the random set of images.
+         */
+        for n in 0...((horizontalCount * 2) - 1)  {
+            // Add two of the item
+            self.itemImages.append(self.allImages[n])
+            self.itemImages.append(self.allImages[n])
+        }
+        
+        /*
+         * randomise the set
+         */
+        self.itemImages = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: self.itemImages) as! [UIImage]
+    }
+    
+    func timeUp() {
+        let alert = UIAlertController(title: "You lose", message: "Play again?", preferredStyle: .alert)
+        
+        let yes = UIAlertAction(title: "Yes", style: .default, handler: {
+            (action) in
+            // TODO:
+            // self.reset()
+        })
+        let no = UIAlertAction(title: "No", style: .cancel, handler: {
+            (action) in
+            self.navigationController?.popViewController(animated: true)
+        })
+        
+        alert.addAction(yes)
+        alert.addAction(no)
+        
+        
+        present(alert, animated: true, completion: nil)
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B0C364251E84AA87003EC320 /* ScoreTimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C364241E84AA87003EC320 /* ScoreTimerViewController.swift */; };
 		B0D4C82C1E831CB5005BAE87 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D4C82B1E831CB5005BAE87 /* AppDelegate.swift */; };
 		B0D4C82E1E831CB5005BAE87 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D4C82D1E831CB5005BAE87 /* ViewController.swift */; };
 		B0D4C8311E831CB5005BAE87 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0D4C82F1E831CB5005BAE87 /* Main.storyboard */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B0C364241E84AA87003EC320 /* ScoreTimerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreTimerViewController.swift; sourceTree = "<group>"; };
 		B0D4C8281E831CB5005BAE87 /* Kids Joy Center.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Kids Joy Center.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0D4C82B1E831CB5005BAE87 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B0D4C82D1E831CB5005BAE87 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				B0D4C8341E831CB5005BAE87 /* LaunchScreen.storyboard */,
 				B0D4C8371E831CB5005BAE87 /* Info.plist */,
 				B0D4C83D1E836AB0005BAE87 /* MemoryGameViewController.swift */,
+				B0C364241E84AA87003EC320 /* ScoreTimerViewController.swift */,
 			);
 			path = "Kids Joy Center";
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0D4C82E1E831CB5005BAE87 /* ViewController.swift in Sources */,
+				B0C364251E84AA87003EC320 /* ScoreTimerViewController.swift in Sources */,
 				B0D4C83E1E836AB0005BAE87 /* MemoryGameViewController.swift in Sources */,
 				B0D4C82C1E831CB5005BAE87 /* AppDelegate.swift in Sources */,
 			);
@@ -308,6 +312,7 @@
 				B0D4C83C1E831CB5005BAE87 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

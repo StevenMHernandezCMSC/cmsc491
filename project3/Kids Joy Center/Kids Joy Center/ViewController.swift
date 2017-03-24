@@ -133,7 +133,6 @@ class ViewController: UIViewController {
         }
     }
     
-    
     func errorAlert(_ message: String) {
         let errorAlert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         
