@@ -16,14 +16,19 @@ class MemoryGameViewController: UIViewController {
     var blockHeight = 100
     var blockPadding = 10
     
-    var itemViews = [UIImageView]();
-    var itemImages = [UIImage]();
+    var itemViews = [UIImageView]()
+    var itemImages = [UIImage]()
+    
+    var selectedItem: Int?
+    var interactionEnabled = true;
     
     let allImages = [UIImage](arrayLiteral: #imageLiteral(resourceName: "bird"), #imageLiteral(resourceName: "cat"), #imageLiteral(resourceName: "dog"), #imageLiteral(resourceName: "gator"), #imageLiteral(resourceName: "giraffe"), #imageLiteral(resourceName: "horse"), #imageLiteral(resourceName: "lion"), #imageLiteral(resourceName: "monkey"), #imageLiteral(resourceName: "rooster"), #imageLiteral(resourceName: "zebra"));
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        self.title = "Memory Game"
+        
         self.view.backgroundColor = UIColor.white
     }
     
@@ -31,8 +36,9 @@ class MemoryGameViewController: UIViewController {
         /*
          * reset
          */
-        itemViews = [UIImageView]();
-        itemImages = [UIImage]();
+        itemViews = [UIImageView]()
+        itemImages = [UIImage]()
+        interactionEnabled = true
         
         let horizontalCount = self.difficulty == 0 ? 3 : self.difficulty == 1 ? 4 : 5 // ugly: {3,4,5}
         
@@ -72,16 +78,43 @@ class MemoryGameViewController: UIViewController {
             }
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
     func flip(_ sender: UITapGestureRecognizer) {
-        let view = sender.view as! UIImageView
-        let index = itemViews.index(of: view)!
+        if (self.interactionEnabled) {
+            let view = sender.view as! UIImageView
+            let index = itemViews.index(of: view)!
+            
+            view.image = self.itemImages[index]
+            
+            if let previous = self.selectedItem {
+                self.interactionEnabled = false
 
-        view.image = self.itemImages[index]
+                if self.itemImages[previous] == self.itemImages[index] {
+                    // images are the same
+                    self.interactionEnabled = true
+                    // disable interaction on these views
+                    self.itemViews[index].isUserInteractionEnabled = false
+                    self.itemViews[previous].isUserInteractionEnabled = false
+                } else {
+                    // images are different
+                    
+                    // wait one second before allowing interactions again
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        view.image = nil
+                        self.itemViews[previous].image = nil
+                        
+                        self.interactionEnabled = true
+                    }
+                }
+                self.selectedItem = nil
+            } else {
+                self.selectedItem = index
+            }
+        }
     }
     
     func makeViewTappable(v: UIImageView, action: Selector?)
