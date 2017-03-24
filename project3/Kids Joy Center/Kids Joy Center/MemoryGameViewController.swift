@@ -13,6 +13,8 @@ class MemoryGameViewController: UIViewController {
     
     var difficulty = -1
     
+    var lastPairFound: Int64 = -1
+    
     var blockHeight = 100
     var blockPadding = 10
     
@@ -112,6 +114,20 @@ class MemoryGameViewController: UIViewController {
                     // disable interaction on these views
                     self.itemViews[index].isUserInteractionEnabled = false
                     self.itemViews[previous].isUserInteractionEnabled = false
+                    
+                    //
+                    let date = NSDate()
+                    let time = Int64(date.timeIntervalSince1970)
+                    
+                    if time - self.lastPairFound <= 3 {
+                        self.scoreTimer?.incrementScore(5)
+                    } else if time - self.lastPairFound <= 7 {
+                        self.scoreTimer?.incrementScore(4)
+                    } else {
+                        self.scoreTimer?.incrementScore(3)
+                    }
+                    
+                    self.lastPairFound = Int64(date.timeIntervalSince1970)
                     
                     if (self.checkIfAllCardsAreFlipped()) {
                         self.winnerAlert()
