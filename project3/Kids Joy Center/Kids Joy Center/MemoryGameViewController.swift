@@ -49,9 +49,7 @@ class MemoryGameViewController: UIViewController {
         scoreTimer?.view.frame = CGRect(x: 0, y: 100, width: 1024, height: 45)
         scoreTimer?.seconds = self.difficulty == 0 ? 120 : self.difficulty == 1 ? 105 : 90 // ugly: {120, 105, 90}
         scoreTimer?.timerFinishedCallback = timeUp
-        scoreTimer?.seconds = 2
         self.view.addSubview((scoreTimer?.view)!)
-        
         
         let horizontalCount = self.difficulty == 0 ? 3 : self.difficulty == 1 ? 4 : 5 // ugly: {3,4,5}
         
@@ -75,6 +73,9 @@ class MemoryGameViewController: UIViewController {
         let topPadding = (768 - (4 * blockHeight) - (3 * blockPadding)) / 2
         let leftPadding = (1024 - (horizontalCount * blockHeight) - ((horizontalCount - 1) * blockPadding)) / 2
         
+        /*
+         * Add all the image views
+         */
         for y in 0...3 {
             for x in 0...(horizontalCount - 1) {
                 let button = UIImageView(frame: CGRect(x: leftPadding + ((blockHeight + blockPadding) * x),
@@ -92,6 +93,9 @@ class MemoryGameViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
+    /**
+     * Click on a card. If a card was clicked previously, check if they match.
+     */
     func flip(_ sender: UITapGestureRecognizer) {
         if (self.interactionEnabled) {
             let view = sender.view as! UIImageView
@@ -108,6 +112,12 @@ class MemoryGameViewController: UIViewController {
                     // disable interaction on these views
                     self.itemViews[index].isUserInteractionEnabled = false
                     self.itemViews[previous].isUserInteractionEnabled = false
+                    
+                    if (self.checkIfAllCardsAreFlipped()) {
+                        self.winnerAlert()
+                        self.scoreTimer?.stopTimer()
+                        // TODO: save to highscores
+                    }
                 } else {
                     // images are different
                     
@@ -141,9 +151,13 @@ class MemoryGameViewController: UIViewController {
         /*
          * reset
          */
-        itemViews = [UIImageView]()
         itemImages = [UIImage]()
         interactionEnabled = true
+        for (i, view) in self.itemViews.enumerated() {
+            view.isUserInteractionEnabled = true
+            self.itemViews[i].image = nil
+        }
+        self.selectedItem = nil
         
         /*
          * add score and timer
@@ -176,7 +190,7 @@ class MemoryGameViewController: UIViewController {
         let yes = UIAlertAction(title: "Yes", style: .default, handler: {
             (action) in
             // TODO:
-            // self.reset()
+            self.reset()
         })
         let no = UIAlertAction(title: "No", style: .cancel, handler: {
             (action) in
@@ -186,7 +200,34 @@ class MemoryGameViewController: UIViewController {
         alert.addAction(yes)
         alert.addAction(no)
         
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func winnerAlert() {
+        let alert = UIAlertController(title: "You win", message: "Play again?", preferredStyle: .alert)
+        
+        let yes = UIAlertAction(title: "Yes", style: .default, handler: {
+            (action) in
+            // TODO:
+            self.reset()
+        })
+        let no = UIAlertAction(title: "No", style: .cancel, handler: {
+            (action) in
+            self.navigationController?.popViewController(animated: true)
+        })
+        
+        alert.addAction(yes)
+        alert.addAction(no)
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    func checkIfAllCardsAreFlipped() -> Bool {
+        for view in self.itemViews {
+            if view.image == nil {
+                return false
+            }
+        }
+        return true
     }
 }

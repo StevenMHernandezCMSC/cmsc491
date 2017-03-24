@@ -85,6 +85,10 @@ class ScoreTimerViewController: UIViewController {
         }
     }
     
+    func stopTimer() {
+        self.timer?.invalidate()
+    }
+    
     func start() {
         self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(ScoreTimerViewController.everySecond), userInfo: nil, repeats: true)
         
