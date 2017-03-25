@@ -110,10 +110,15 @@ class ViewController: UIViewController {
             self.errorAlert("Please select a difficulty")
         } else {
             switch (self.gameSelected) {
-                case 1:
-                    let vc = MemoryGameViewController()
-                    vc.difficulty = self.mode
-                    self.navigationController?.pushViewController(vc, animated: true);
+            case 0:
+                let vc = MemoryGameViewController()
+                vc.difficulty = self.mode
+                self.navigationController?.pushViewController(vc, animated: true);
+                break
+            case 1:
+                let vc = SortingGameViewController()
+                vc.difficulty = self.mode
+                self.navigationController?.pushViewController(vc, animated: true);
                 break
             default:
                 break

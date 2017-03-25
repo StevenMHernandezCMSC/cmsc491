@@ -115,10 +115,9 @@ class MemoryGameViewController: UIViewController {
                     self.itemViews[index].isUserInteractionEnabled = false
                     self.itemViews[previous].isUserInteractionEnabled = false
                     
-                    //
+                    // determine score
                     let date = NSDate()
                     let time = Int64(date.timeIntervalSince1970)
-                    
                     if time - self.lastPairFound <= 3 {
                         self.scoreTimer?.incrementScore(5)
                     } else if time - self.lastPairFound <= 7 {
@@ -126,7 +125,6 @@ class MemoryGameViewController: UIViewController {
                     } else {
                         self.scoreTimer?.incrementScore(3)
                     }
-                    
                     self.lastPairFound = Int64(date.timeIntervalSince1970)
                     
                     if (self.checkIfAllCardsAreFlipped()) {

@@ -98,7 +98,8 @@ class ScoreTimerViewController: UIViewController {
     
     func everySecond() {
         self.seconds -= 1
-        if self.seconds == 0 {
+        if self.seconds <= 0 {
+            self.seconds = 0
             self.timer?.invalidate()
             if let cb = self.timerFinishedCallback {
                 cb()
