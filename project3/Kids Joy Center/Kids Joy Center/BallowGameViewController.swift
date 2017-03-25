@@ -15,13 +15,19 @@ class BallowGameViewController: UIViewController {
     
     var difficulty = -1
     
+    var speedRatio = 1.0
+    
     var lastPairFound: Int64 = -1
     
     var scoreTimer: ScoreTimerViewController?
     
     var balloons = [UIImageView]()
     
+    var pointRangeMax = 0
+    
     var timer: Timer?
+    var bonusTimer: Timer?
+    var killerTimer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +47,10 @@ class BallowGameViewController: UIViewController {
         
         scoreTimer?.start()
         
+        self.speedRatio = self.difficulty == 0 ? 1.0 : self.difficulty == 1 ? 0.8 : 0.6 // ugly: {1.0, 0.8, 0.6}
+        
+        self.pointRangeMax = self.difficulty == 0 ? 9 : self.difficulty == 1 ? 7 : 5 // ugly: {9, 7, 5}
+        
         startBalloonTimer()
     }
     
@@ -49,21 +59,50 @@ class BallowGameViewController: UIViewController {
     }
     
     func loadBalloon() {
+        var selectedLocations = [Int]()
+        
+        print(Int(arc4random() % UInt32(difficulty + 1)))
+        
+        for _ in 0...Int(arc4random() % UInt32(difficulty + 1)) {
+            var location = -1
+            repeat {
+                location = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: [Int]((0...9)))[0] as! Int
+            } while (selectedLocations.contains(location))
+            selectedLocations.append(location)
+            
+            let balloon = UIImageView(frame: CGRect(x: 12 + (100 * location), y: 800, width: 100, height: 100));
+            balloon.image = self.balloonImages[Int(arc4random() % 10)]
+            let number = UIImageView(frame: CGRect(x: 25, y: 25, width: 50, height: 50))
+            number.image = numberImages[Int(arc4random() % UInt32(self.pointRangeMax + 1))]
+            balloon.addSubview(number)
+            balloon.isUserInteractionEnabled = true
+            self.balloons.append(balloon)
+            self.view.addSubview(balloon)
+            
+            UIView.animate(withDuration: 8 * speedRatio, delay: 0, options: .allowUserInteraction, animations:
+                {
+                    balloon.frame = CGRect(x: 12 + (100 * location), y: -100, width: 99, height: 99)
+            }) {_ in
+                balloon.removeFromSuperview()
+                
+                self.balloons.remove(at: self.balloons.index(of: balloon)!)
+            }
+        }
+    }
+    
+    func loadBonusBalloon() {
         let location = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: [Int]((0...9)))[0] as! Int
         
         let balloon = UIImageView(frame: CGRect(x: 12 + (100 * location), y: 800, width: 100, height: 100));
         balloon.image = self.balloonImages[Int(arc4random() % 10)]
         let number = UIImageView(frame: CGRect(x: 25, y: 25, width: 50, height: 50))
-        number.image = numberImages[Int(arc4random() % 10)]
+        number.image = #imageLiteral(resourceName: "star")
         balloon.addSubview(number)
         balloon.isUserInteractionEnabled = true
         self.balloons.append(balloon)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.pop(_:)))
-        balloon.addGestureRecognizer(tap)
         self.view.addSubview(balloon)
         
-        
-        UIView.animate(withDuration: 8, delay: 0, options: .allowUserInteraction, animations:
+        UIView.animate(withDuration: 4 * speedRatio, delay: 0, options: .allowUserInteraction, animations:
             {
                 balloon.frame = CGRect(x: 12 + (100 * location), y: -100, width: 99, height: 99)
         }) {_ in
@@ -71,48 +110,80 @@ class BallowGameViewController: UIViewController {
             
             self.balloons.remove(at: self.balloons.index(of: balloon)!)
         }
+    }
+    
+    func loadKillerBalloon() {
+        let location = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: [Int]((0...9)))[0] as! Int
         
+        let balloon = UIImageView(frame: CGRect(x: 12 + (100 * location), y: 800, width: 100, height: 100));
+        balloon.image = self.balloonImages[Int(arc4random() % 10)]
+        let number = UIImageView(frame: CGRect(x: 25, y: 25, width: 50, height: 50))
+        number.image = #imageLiteral(resourceName: "skull")
+        balloon.addSubview(number)
+        balloon.isUserInteractionEnabled = true
+        self.balloons.append(balloon)
+        self.view.addSubview(balloon)
+        
+        UIView.animate(withDuration: 10 * speedRatio, delay: 0, options: .allowUserInteraction, animations:
+            {
+                balloon.frame = CGRect(x: 12 + (100 * location), y: -100, width: 99, height: 99)
+        }) {_ in
+            balloon.removeFromSuperview()
+            
+            self.balloons.remove(at: self.balloons.index(of: balloon)!)
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first
         let touchLocation = touch!.location(in: self.view)
         
+        
         for v in self.balloons {
             if v.layer.presentation()!.hitTest(touchLocation) != nil {
                 if (v.image != nil) {
                     let image = (v.subviews[0] as! UIImageView).image
-                    let score = numberImages.index(of: image!)
                     
-                    self.scoreTimer?.incrementScore(score!)
+                    if image == #imageLiteral(resourceName: "skull") {
+                        loserAlert();
+                    } else if image == #imageLiteral(resourceName: "star") {
+                        self.speedRatio *= 2.0
+                        // only for 5 seconds
+                        Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(BallowGameViewController.decreaseSpeed), userInfo: nil, repeats: false)
+                    } else {
+                        let score = numberImages.index(of: image!)
+                        
+                        self.scoreTimer?.incrementScore(score!)
+                    }
                     
                     // hide balloon
                     v.image = nil
                 }
             }
         }
-        
-        /*for i in 2...self.view.subviews.count {
-         if self.view.subviews[i-1].layer.presentation()!.hitTest(touchLocation) != nil {
-         print("touched subview \(i)")
-         self.view.subviews[i-1].backgroundColor = UIColor.black
-         }
-         }*/
     }
     
-    func pop(_ sender: UITapGestureRecognizer) {
-        print("got em!", sender)
+    func decreaseSpeed() {
+        self.speedRatio /= 2.0
     }
     
     func stopBalloonTimer() {
         self.timer?.invalidate()
+        self.bonusTimer?.invalidate()
+        self.killerTimer?.invalidate()
     }
     
     func startBalloonTimer() {
         self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(BallowGameViewController.loadBalloon), userInfo: nil, repeats: true)
+        self.bonusTimer = Timer.scheduledTimer(timeInterval: 5.0 + Double(arc4random() % 20), target: self, selector: #selector(BallowGameViewController.loadBonusBalloon), userInfo: nil, repeats: true)
+        self.killerTimer = Timer.scheduledTimer(timeInterval: 5.0 + Double(arc4random() % 20), target: self, selector: #selector(BallowGameViewController.loadKillerBalloon), userInfo: nil, repeats: true)
     }
     
     func reset() {
+        for v in self.balloons {
+            v.removeFromSuperview()
+        }
+        
         stopBalloonTimer()
         startBalloonTimer()
         self.scoreTimer?.score = 0
@@ -121,9 +192,11 @@ class BallowGameViewController: UIViewController {
     }
     
     func loserAlert() {
+        self.scoreTimer?.stopTimer()
+        
         self.stopBalloonTimer()
         
-        let alert = UIAlertController(title: "You lose", message: "Play again?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Game Over", message: "Play again?", preferredStyle: .alert)
         
         let yes = UIAlertAction(title: "Yes", style: .default, handler: {
             (action) in
