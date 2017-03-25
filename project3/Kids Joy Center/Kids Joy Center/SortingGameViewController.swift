@@ -155,8 +155,11 @@ class SortingGameViewController: UIViewController {
             view.isUserInteractionEnabled = true
             view.frame = getLocationInTopBar(i: i)
         }
+
+        correctImageCount = 0
         
         self.scoreTimer?.seconds = self.difficulty == 0 ? 60 : self.difficulty == 1 ? 45 : 30 // ugly: {60, 45, 30}
+        self.scoreTimer?.score = 0
         self.scoreTimer?.start()
     }
     
