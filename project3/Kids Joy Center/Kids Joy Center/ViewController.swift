@@ -120,6 +120,11 @@ class ViewController: UIViewController {
                 vc.difficulty = self.mode
                 self.navigationController?.pushViewController(vc, animated: true);
                 break
+            case 2:
+                let vc = BallowGameViewController()
+                vc.difficulty = self.mode
+                self.navigationController?.pushViewController(vc, animated: true);
+                break
             default:
                 break
             }
