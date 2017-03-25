@@ -77,11 +77,17 @@ class ScoreTimerViewController: UIViewController {
     
     func renderScore() {
         self.scoreOnes.image = numberImages[(self.score % 10) % 10];
+
         if score >= 10 {
             self.scoreTens.image = numberImages[(self.score / 10) % 10];
-            if score >= 100 {
-                self.scoreHundreds.image = numberImages[self.score / 100 % 10];
-            }
+        } else {
+            self.scoreTens.image = nil
+        }
+        
+        if score >= 100 {
+            self.scoreHundreds.image = numberImages[self.score / 100 % 10];
+        } else {
+            self.scoreHundreds.image = nil
         }
     }
     
