@@ -39,6 +39,16 @@ class ViewController: UIViewController {
         self.makeViewTappable(v: hardButton, action: #selector(self.modeSelect(_:)))
         self.makeViewTappable(v: startButton, action: #selector(self.start(_:)))
         
+        memoryGameButton.image = #imageLiteral(resourceName: "memory")
+        sortingGameButton.image = #imageLiteral(resourceName: "sorting-icon")
+        balloonGameButton.image = #imageLiteral(resourceName: "balloon-game-logo1")
+        
+        easyButton.image = #imageLiteral(resourceName: "easy")
+        mediumButton.image = #imageLiteral(resourceName: "medium")
+        hardButton.image = #imageLiteral(resourceName: "hard")
+        
+        startButton.image = #imageLiteral(resourceName: "PlayButton")
+        
         self.view.addSubview(memoryGameButton)
         self.view.addSubview(sortingGameButton)
         self.view.addSubview(balloonGameButton)
@@ -57,10 +67,6 @@ class ViewController: UIViewController {
     
     func makeViewTappable(v: UIImageView, action: Selector?)
     {
-        v.backgroundColor = UIColor.gray
-        v.layer.borderColor = UIColor.white.cgColor
-        v.layer.borderWidth = 1.0
-        v.layer.cornerRadius = 5.0
         let tap = UITapGestureRecognizer(target: self, action: action)
         v.isUserInteractionEnabled = true
         v.addGestureRecognizer(tap)
