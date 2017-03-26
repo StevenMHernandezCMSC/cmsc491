@@ -8,6 +8,9 @@
 
 import UIKit
 
+// Global
+var highscoreManager = HighscoreManager()
+
 class ViewController: UIViewController {
     var memoryGameButton = UIImageView(frame: CGRect(x: 100, y: 100, width: 99, height: 99));
     var sortingGameButton = UIImageView(frame: CGRect(x: 200, y: 100, width: 99, height: 99));
@@ -43,6 +46,8 @@ class ViewController: UIViewController {
         self.view.addSubview(mediumButton)
         self.view.addSubview(hardButton)
         self.view.addSubview(startButton)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Highscores", style: .plain, target: self, action: #selector(popUp))
     }
 
     override func didReceiveMemoryWarning() {
@@ -151,6 +156,25 @@ class ViewController: UIViewController {
         errorAlert.addAction(action)
         
         present(errorAlert, animated: true, completion: nil)
+    }
+    
+    
+    func popUp() {
+        let newVC = HighScoresViewController()
+        newVC.view.backgroundColor = UIColor.gray
+        
+        newVC.modalPresentationStyle = .popover
+        newVC.modalTransitionStyle = .coverVertical
+        
+        newVC.preferredContentSize = CGSize(width: 450, height: 450)
+        
+        let pop = newVC.popoverPresentationController
+        pop?.barButtonItem = navigationItem.rightBarButtonItem
+        
+        //vc.modalTransitionStyle = .crossDissolve
+        present(newVC, animated: true, completion: nil)
+        
+        
     }
     
 }

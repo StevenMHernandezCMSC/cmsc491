@@ -218,6 +218,8 @@ class MemoryGameViewController: UIViewController {
     }
     
     func winnerAlert() {
+        highscoreManager.addHighScore(score: (self.scoreTimer?.score)!, game: Game.memory, difficulty: self.difficulty)
+        
         let alert = UIAlertController(title: "You win", message: "Play again?", preferredStyle: .alert)
         
         let yes = UIAlertAction(title: "Yes", style: .default, handler: {

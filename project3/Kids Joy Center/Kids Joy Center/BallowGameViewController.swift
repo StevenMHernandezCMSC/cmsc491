@@ -42,7 +42,7 @@ class BallowGameViewController: UIViewController {
         scoreTimer = ScoreTimerViewController()
         scoreTimer?.view.frame = CGRect(x: 0, y: 100, width: 1024, height: 45)
         self.scoreTimer?.seconds = self.difficulty == 0 ? 60 : self.difficulty == 1 ? 45 : 30 // ugly: {60, 45, 30}
-        scoreTimer?.timerFinishedCallback = loserAlert
+        scoreTimer?.timerFinishedCallback = winnerAlert
         self.view.addSubview((scoreTimer?.view)!)
         
         scoreTimer?.start()
@@ -54,14 +54,16 @@ class BallowGameViewController: UIViewController {
         startBalloonTimer()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        stopBalloonTimer()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
     func loadBalloon() {
         var selectedLocations = [Int]()
-        
-        print(Int(arc4random() % UInt32(difficulty + 1)))
         
         for _ in 0...Int(arc4random() % UInt32(difficulty + 1)) {
             var location = -1
@@ -214,6 +216,12 @@ class BallowGameViewController: UIViewController {
     }
     
     func winnerAlert() {
+        highscoreManager.addHighScore(score: (self.scoreTimer?.score)!, game: Game.balloon, difficulty: self.difficulty)
+        
+        self.scoreTimer?.stopTimer()
+        
+        self.stopBalloonTimer()
+
         let alert = UIAlertController(title: "You win", message: "Play again?", preferredStyle: .alert)
         
         let yes = UIAlertAction(title: "Yes", style: .default, handler: {

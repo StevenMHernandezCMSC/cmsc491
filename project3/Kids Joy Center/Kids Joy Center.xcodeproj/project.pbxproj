@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B06C9F801E86F13F003EAFB8 /* HighscoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06C9F7F1E86F13F003EAFB8 /* HighscoreManager.swift */; };
+		B06C9F821E86FD6D003EAFB8 /* HighScoresViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06C9F811E86FD6D003EAFB8 /* HighScoresViewController.swift */; };
+		B06C9F851E874E15003EAFB8 /* Highscore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06C9F841E874E15003EAFB8 /* Highscore.swift */; };
 		B0B80B301E85D2C60006A2D6 /* SortingGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B80B2F1E85D2C60006A2D6 /* SortingGameViewController.swift */; };
 		B0B80B321E8608F90006A2D6 /* BallowGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B80B311E8608F90006A2D6 /* BallowGameViewController.swift */; };
 		B0C364251E84AA87003EC320 /* ScoreTimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C364241E84AA87003EC320 /* ScoreTimerViewController.swift */; };
@@ -19,6 +22,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B06C9F7F1E86F13F003EAFB8 /* HighscoreManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HighscoreManager.swift; path = Services/HighscoreManager.swift; sourceTree = "<group>"; };
+		B06C9F811E86FD6D003EAFB8 /* HighScoresViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighScoresViewController.swift; sourceTree = "<group>"; };
+		B06C9F841E874E15003EAFB8 /* Highscore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Highscore.swift; path = Models/Highscore.swift; sourceTree = "<group>"; };
 		B0B80B2F1E85D2C60006A2D6 /* SortingGameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortingGameViewController.swift; sourceTree = "<group>"; };
 		B0B80B311E8608F90006A2D6 /* BallowGameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BallowGameViewController.swift; sourceTree = "<group>"; };
 		B0C364241E84AA87003EC320 /* ScoreTimerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreTimerViewController.swift; sourceTree = "<group>"; };
@@ -43,6 +49,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B06C9F7E1E86F11E003EAFB8 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B06C9F7F1E86F13F003EAFB8 /* HighscoreManager.swift */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		B06C9F831E874DFF003EAFB8 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B06C9F841E874E15003EAFB8 /* Highscore.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		B0D4C81F1E831CB5005BAE87 = {
 			isa = PBXGroup;
 			children = (
@@ -62,8 +84,11 @@
 		B0D4C82A1E831CB5005BAE87 /* Kids Joy Center */ = {
 			isa = PBXGroup;
 			children = (
+				B06C9F831E874DFF003EAFB8 /* Models */,
+				B06C9F7E1E86F11E003EAFB8 /* Services */,
 				B0D4C82B1E831CB5005BAE87 /* AppDelegate.swift */,
 				B0D4C82D1E831CB5005BAE87 /* ViewController.swift */,
+				B06C9F811E86FD6D003EAFB8 /* HighScoresViewController.swift */,
 				B0D4C82F1E831CB5005BAE87 /* Main.storyboard */,
 				B0D4C8321E831CB5005BAE87 /* Assets.xcassets */,
 				B0D4C8341E831CB5005BAE87 /* LaunchScreen.storyboard */,
@@ -151,10 +176,13 @@
 			files = (
 				B0B80B301E85D2C60006A2D6 /* SortingGameViewController.swift in Sources */,
 				B0D4C82E1E831CB5005BAE87 /* ViewController.swift in Sources */,
+				B06C9F851E874E15003EAFB8 /* Highscore.swift in Sources */,
 				B0C364251E84AA87003EC320 /* ScoreTimerViewController.swift in Sources */,
+				B06C9F801E86F13F003EAFB8 /* HighscoreManager.swift in Sources */,
 				B0B80B321E8608F90006A2D6 /* BallowGameViewController.swift in Sources */,
 				B0D4C83E1E836AB0005BAE87 /* MemoryGameViewController.swift in Sources */,
 				B0D4C82C1E831CB5005BAE87 /* AppDelegate.swift in Sources */,
+				B06C9F821E86FD6D003EAFB8 /* HighScoresViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
