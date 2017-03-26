@@ -10,6 +10,9 @@
 		B06C9F801E86F13F003EAFB8 /* HighscoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06C9F7F1E86F13F003EAFB8 /* HighscoreManager.swift */; };
 		B06C9F821E86FD6D003EAFB8 /* HighScoresViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06C9F811E86FD6D003EAFB8 /* HighScoresViewController.swift */; };
 		B06C9F851E874E15003EAFB8 /* Highscore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06C9F841E874E15003EAFB8 /* Highscore.swift */; };
+		B06C9F871E88454F003EAFB8 /* T07RAND0.wav in Resources */ = {isa = PBXBuildFile; fileRef = B06C9F861E88454F003EAFB8 /* T07RAND0.wav */; };
+		B06C9F8A1E88458D003EAFB8 /* cheer.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B06C9F881E88458D003EAFB8 /* cheer.mp3 */; };
+		B06C9F8B1E88458D003EAFB8 /* pop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B06C9F891E88458D003EAFB8 /* pop.mp3 */; };
 		B0B80B301E85D2C60006A2D6 /* SortingGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B80B2F1E85D2C60006A2D6 /* SortingGameViewController.swift */; };
 		B0B80B321E8608F90006A2D6 /* BallowGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B80B311E8608F90006A2D6 /* BallowGameViewController.swift */; };
 		B0C364251E84AA87003EC320 /* ScoreTimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C364241E84AA87003EC320 /* ScoreTimerViewController.swift */; };
@@ -25,6 +28,9 @@
 		B06C9F7F1E86F13F003EAFB8 /* HighscoreManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HighscoreManager.swift; path = Services/HighscoreManager.swift; sourceTree = "<group>"; };
 		B06C9F811E86FD6D003EAFB8 /* HighScoresViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighScoresViewController.swift; sourceTree = "<group>"; };
 		B06C9F841E874E15003EAFB8 /* Highscore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Highscore.swift; path = Models/Highscore.swift; sourceTree = "<group>"; };
+		B06C9F861E88454F003EAFB8 /* T07RAND0.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = T07RAND0.wav; sourceTree = "<group>"; };
+		B06C9F881E88458D003EAFB8 /* cheer.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = cheer.mp3; sourceTree = "<group>"; };
+		B06C9F891E88458D003EAFB8 /* pop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pop.mp3; sourceTree = "<group>"; };
 		B0B80B2F1E85D2C60006A2D6 /* SortingGameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortingGameViewController.swift; sourceTree = "<group>"; };
 		B0B80B311E8608F90006A2D6 /* BallowGameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BallowGameViewController.swift; sourceTree = "<group>"; };
 		B0C364241E84AA87003EC320 /* ScoreTimerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreTimerViewController.swift; sourceTree = "<group>"; };
@@ -84,6 +90,9 @@
 		B0D4C82A1E831CB5005BAE87 /* Kids Joy Center */ = {
 			isa = PBXGroup;
 			children = (
+				B06C9F861E88454F003EAFB8 /* T07RAND0.wav */,
+				B06C9F881E88458D003EAFB8 /* cheer.mp3 */,
+				B06C9F891E88458D003EAFB8 /* pop.mp3 */,
 				B06C9F831E874DFF003EAFB8 /* Models */,
 				B06C9F7E1E86F11E003EAFB8 /* Services */,
 				B0D4C82B1E831CB5005BAE87 /* AppDelegate.swift */,
@@ -161,7 +170,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B06C9F8B1E88458D003EAFB8 /* pop.mp3 in Resources */,
+				B06C9F871E88454F003EAFB8 /* T07RAND0.wav in Resources */,
 				B0D4C8361E831CB5005BAE87 /* LaunchScreen.storyboard in Resources */,
+				B06C9F8A1E88458D003EAFB8 /* cheer.mp3 in Resources */,
 				B0D4C8331E831CB5005BAE87 /* Assets.xcassets in Resources */,
 				B0D4C8311E831CB5005BAE87 /* Main.storyboard in Resources */,
 			);
@@ -231,6 +243,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				DEBUG_ACTIVITY_MODE = "";
+				"DEBUG_ACTIVITY_MODE[sdk=iphonesimulator*]" = disable;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -252,7 +266,6 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -281,6 +294,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				DEBUG_ACTIVITY_MODE = "";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

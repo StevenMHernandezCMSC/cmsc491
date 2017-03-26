@@ -8,9 +8,13 @@
 
 import UIKit
 import GameplayKit
+import AVFoundation
 
 class MemoryGameViewController: UIViewController {
     var bgImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 1024, height: 768));
+    
+    var soundPlayer = AVAudioPlayer()
+    let audioPath = Bundle.main.path(forResource: "cheer", ofType: "mp3")
     
     var difficulty = -1
     
@@ -119,6 +123,14 @@ class MemoryGameViewController: UIViewController {
                     // disable interaction on these views
                     self.itemViews[index].isUserInteractionEnabled = false
                     self.itemViews[previous].isUserInteractionEnabled = false
+                    
+                    //play sound
+                    do{
+                        soundPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: audioPath!))
+                        
+                        soundPlayer.play()
+                    }
+                    catch{  }
                     
                     // determine score
                     let date = NSDate()

@@ -8,9 +8,13 @@
 
 import UIKit
 import GameplayKit
+import AVFoundation
 
 class BallowGameViewController: UIViewController {
     var bgImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 1024, height: 768));
+    
+    var soundPlayer = AVAudioPlayer()
+    let audioPath = Bundle.main.path(forResource: "pop", ofType: "mp3")
     
     let balloonImages = [UIImage](arrayLiteral: #imageLiteral(resourceName: "color1"),#imageLiteral(resourceName: "color2"),#imageLiteral(resourceName: "color3"),#imageLiteral(resourceName: "color4"),#imageLiteral(resourceName: "color5"),#imageLiteral(resourceName: "color6"),#imageLiteral(resourceName: "color7"),#imageLiteral(resourceName: "color8"),#imageLiteral(resourceName: "color9"),#imageLiteral(resourceName: "color10"))
     
@@ -153,11 +157,27 @@ class BallowGameViewController: UIViewController {
                     
                     if image == #imageLiteral(resourceName: "skull") {
                         loserAlert();
+                        
+                        //play sound
+                        do{
+                            soundPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: Bundle.main.path(forResource: "T07RAND0", ofType: "wav")!))
+                            
+                            soundPlayer.play()
+                        }
+                        catch{  }
                     } else if image == #imageLiteral(resourceName: "star") {
                         self.speedRatio *= 2.0
                         // only for 5 seconds
                         Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(BallowGameViewController.decreaseSpeed), userInfo: nil, repeats: false)
                     } else {
+                        //play sound
+                        do{
+                            soundPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: audioPath!))
+                            
+                            soundPlayer.play()
+                        }
+                        catch{  }
+                        
                         let score = numberImages.index(of: image!)
                         
                         self.scoreTimer?.incrementScore(score!)
