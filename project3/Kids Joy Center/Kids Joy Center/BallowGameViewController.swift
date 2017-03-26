@@ -10,6 +10,7 @@ import UIKit
 import GameplayKit
 
 class BallowGameViewController: UIViewController {
+    var bgImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 1024, height: 768));
     
     let balloonImages = [UIImage](arrayLiteral: #imageLiteral(resourceName: "color1"),#imageLiteral(resourceName: "color2"),#imageLiteral(resourceName: "color3"),#imageLiteral(resourceName: "color4"),#imageLiteral(resourceName: "color5"),#imageLiteral(resourceName: "color6"),#imageLiteral(resourceName: "color7"),#imageLiteral(resourceName: "color8"),#imageLiteral(resourceName: "color9"),#imageLiteral(resourceName: "color10"))
     
@@ -33,6 +34,10 @@ class BallowGameViewController: UIViewController {
         super.viewDidLoad()
         
         self.view.backgroundColor = UIColor.white
+        
+        self.bgImage.image = #imageLiteral(resourceName: "sky-background")
+        self.bgImage.alpha = 0.3
+        self.view.addSubview(bgImage)
         
         self.title = "Pop the Balloons"
         
@@ -206,7 +211,7 @@ class BallowGameViewController: UIViewController {
         })
         let no = UIAlertAction(title: "No", style: .cancel, handler: {
             (action) in
-            self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
         })
         
         alert.addAction(yes)
@@ -230,7 +235,7 @@ class BallowGameViewController: UIViewController {
         })
         let no = UIAlertAction(title: "No", style: .cancel, handler: {
             (action) in
-            self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
         })
         
         alert.addAction(yes)

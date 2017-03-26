@@ -12,15 +12,17 @@ import UIKit
 var highscoreManager = HighscoreManager()
 
 class ViewController: UIViewController {
-    var memoryGameButton = UIImageView(frame: CGRect(x: 100, y: 100, width: 99, height: 99));
-    var sortingGameButton = UIImageView(frame: CGRect(x: 200, y: 100, width: 99, height: 99));
-    var balloonGameButton = UIImageView(frame: CGRect(x: 300, y: 100, width: 99, height: 99));
+    var bgImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 1024, height: 768));
+    
+    var memoryGameButton = UIImageView(frame: CGRect(x: 67, y: 100, width: 250, height: 250));
+    var sortingGameButton = UIImageView(frame: CGRect(x: 382, y: 100, width: 250, height: 250));
+    var balloonGameButton = UIImageView(frame: CGRect(x: 697, y: 100, width: 250, height: 250));
 
-    var easyButton = UIImageView(frame: CGRect(x: 100, y: 200, width: 99, height: 99));
-    var mediumButton = UIImageView(frame: CGRect(x: 200, y: 200, width: 99, height: 99));
-    var hardButton = UIImageView(frame: CGRect(x: 300, y: 200, width: 99, height: 99));
+    var easyButton = UIImageView(frame: CGRect(x: 400, y: 500, width: 75, height: 75));
+    var mediumButton = UIImageView(frame: CGRect(x: 475, y: 500, width: 75, height: 75));
+    var hardButton = UIImageView(frame: CGRect(x: 550, y: 500, width: 75, height: 75));
 
-    var startButton = UIImageView(frame: CGRect(x: 200, y: 400, width: 99, height: 99));
+    var startButton = UIImageView(frame: CGRect(x: 437, y: 600, width: 150, height: 75));
     
     var mode = -1;
     var gameSelected = -1;
@@ -39,6 +41,9 @@ class ViewController: UIViewController {
         self.makeViewTappable(v: hardButton, action: #selector(self.modeSelect(_:)))
         self.makeViewTappable(v: startButton, action: #selector(self.start(_:)))
         
+        self.bgImage.image = #imageLiteral(resourceName: "back-main")
+        self.bgImage.alpha = 0.3
+        
         memoryGameButton.image = #imageLiteral(resourceName: "memory")
         sortingGameButton.image = #imageLiteral(resourceName: "sorting-icon")
         balloonGameButton.image = #imageLiteral(resourceName: "balloon-game-logo1")
@@ -49,6 +54,7 @@ class ViewController: UIViewController {
         
         startButton.image = #imageLiteral(resourceName: "PlayButton")
         
+        self.view.addSubview(bgImage)
         self.view.addSubview(memoryGameButton)
         self.view.addSubview(sortingGameButton)
         self.view.addSubview(balloonGameButton)
@@ -56,6 +62,12 @@ class ViewController: UIViewController {
         self.view.addSubview(mediumButton)
         self.view.addSubview(hardButton)
         self.view.addSubview(startButton)
+        
+        let logo = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+        logo.contentMode = .scaleAspectFit
+        logo.image = #imageLiteral(resourceName: "star")
+        
+        navigationItem.titleView = logo
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Highscores", style: .plain, target: self, action: #selector(popUp))
     }
@@ -113,8 +125,6 @@ class ViewController: UIViewController {
     }
 
     func start(_ sender: UITapGestureRecognizer) {
-        print(self.gameSelected, self.mode, "n")
-        
         if self.gameSelected == -1 {
             self.errorAlert("Please select a game to play")
         } else if self.mode == -1 {
@@ -150,7 +160,7 @@ class ViewController: UIViewController {
     
     func fadeOut(_ view: UIImageView) {
         UIView.animate(withDuration: 0.3) {
-            view.alpha = 0.8
+            view.alpha = 0.6
         }
     }
     

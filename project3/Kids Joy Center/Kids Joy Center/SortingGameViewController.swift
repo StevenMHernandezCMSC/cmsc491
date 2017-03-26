@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GameplayKit
 
 class SortingGameViewController: UIViewController {
     
@@ -23,9 +24,11 @@ class SortingGameViewController: UIViewController {
     var itemViews = [UIImageView]()
     var itemImages = [UIImage]()
     
-    var landVehicleImages = [UIImage]()
-    var seaVehicleImages = [UIImage]()
-    var airVehicleImages = [UIImage](arrayLiteral: #imageLiteral(resourceName: "balloon-game-logo2"))
+    var landVehicleImages = [UIImage](arrayLiteral: #imageLiteral(resourceName: "3-1"),#imageLiteral(resourceName: "3-2"),#imageLiteral(resourceName: "3-3"),#imageLiteral(resourceName: "3-4"))
+    var seaVehicleImages = [UIImage](arrayLiteral: #imageLiteral(resourceName: "2-1"),#imageLiteral(resourceName: "2-2"),#imageLiteral(resourceName: "2-3"),#imageLiteral(resourceName: "2-4"),#imageLiteral(resourceName: "2-5"))
+    var airVehicleImages = [UIImage](arrayLiteral: #imageLiteral(resourceName: "1-5"),#imageLiteral(resourceName: "1-2"),#imageLiteral(resourceName: "1-3"),#imageLiteral(resourceName: "1-4"))
+    
+    var allVehicleImages = [UIImage]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +36,14 @@ class SortingGameViewController: UIViewController {
         self.view.backgroundColor = UIColor.white
         
         self.title = "Sorting the Vehicles"
+        
+        /*
+         * Populate allVehicleImages array
+         */
+        
+        self.allVehicleImages.append(contentsOf: self.landVehicleImages)
+        self.allVehicleImages.append(contentsOf: self.seaVehicleImages)
+        self.allVehicleImages.append(contentsOf: self.airVehicleImages)
         
         /*
          * add background
@@ -60,11 +71,16 @@ class SortingGameViewController: UIViewController {
         self.view.addSubview(a)
         
         /*
+         * Shuffle Images
+         */
+        self.itemImages = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: self.allVehicleImages) as! [UIImage]
+        
+        /*
          * add image views for each vehicle
          */
         for x in 0...(self.imageCount - 1) {
             let button = UIImageView(frame: self.getLocationInTopBar(i: x));
-            button.image = #imageLiteral(resourceName: "balloon-game-logo2")
+            button.image = self.itemImages[x]
             
             self.makeViewTappable(v: button, action: #selector(self.drag(_:)))
             self.itemViews.append(button)
@@ -74,10 +90,6 @@ class SortingGameViewController: UIViewController {
     
     func makeViewTappable(v: UIImageView, action: Selector?)
     {
-        v.backgroundColor = UIColor.gray
-        v.layer.borderColor = UIColor.white.cgColor
-        v.layer.borderWidth = 1.0
-        v.layer.cornerRadius = 5.0
         let tap = UIPanGestureRecognizer(target: self, action: action)
         v.isUserInteractionEnabled = true
         v.addGestureRecognizer(tap)
@@ -149,7 +161,7 @@ class SortingGameViewController: UIViewController {
     }
     
     func reset() {
-        // TODO: shuffle images
+        self.itemImages = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: self.allVehicleImages) as! [UIImage]
 
         for (i,view) in self.itemViews.enumerated() {
             view.isUserInteractionEnabled = true
@@ -172,7 +184,7 @@ class SortingGameViewController: UIViewController {
         })
         let no = UIAlertAction(title: "No", style: .cancel, handler: {
             (action) in
-            self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
         })
         
         alert.addAction(yes)
@@ -192,7 +204,7 @@ class SortingGameViewController: UIViewController {
         })
         let no = UIAlertAction(title: "No", style: .cancel, handler: {
             (action) in
-            self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
         })
         
         alert.addAction(yes)

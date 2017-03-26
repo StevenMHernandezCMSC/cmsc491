@@ -23,7 +23,6 @@ class Highscore: NSObject, NSCoding {
     }
     
     func encode(with aCoder: NSCoder) {
-        print("git", self.score, self.difficulty)
         aCoder.encode(self.score, forKey: "score")
         aCoder.encode(self.difficulty, forKey: "difficulty")
     }

@@ -10,6 +10,7 @@ import UIKit
 import GameplayKit
 
 class MemoryGameViewController: UIViewController {
+    var bgImage = UIImageView(frame: CGRect(x: 0, y: 0, width: 1024, height: 768));
     
     var difficulty = -1
     
@@ -34,6 +35,10 @@ class MemoryGameViewController: UIViewController {
         self.title = "Memory Game"
         
         self.view.backgroundColor = UIColor.white
+        
+        self.bgImage.image = #imageLiteral(resourceName: "background")
+        self.bgImage.alpha = 0.3
+        self.view.addSubview(bgImage)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -208,7 +213,7 @@ class MemoryGameViewController: UIViewController {
         })
         let no = UIAlertAction(title: "No", style: .cancel, handler: {
             (action) in
-            self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
         })
         
         alert.addAction(yes)
@@ -229,7 +234,7 @@ class MemoryGameViewController: UIViewController {
         })
         let no = UIAlertAction(title: "No", style: .cancel, handler: {
             (action) in
-            self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
         })
         
         alert.addAction(yes)

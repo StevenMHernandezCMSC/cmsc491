@@ -59,30 +59,32 @@ class HighScoresViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel?.text = "ok"
         
+        var str = String(indexPath.row + 1) + ". "
         
         switch (indexPath.section) {
         case 0:
             let highscore = highscoreManager.highscores[Game.memory]![indexPath.row]
-            cell.textLabel?.text = String(highscore.score) + " (" + highscore.difficultyString() + ")"
+            str += String(highscore.score) + " (" + highscore.difficultyString() + ")"
             break;
         case 1:
             let highscore = highscoreManager.highscores[Game.sorting]![indexPath.row]
-            cell.textLabel?.text = String(highscore.score) + " (" + highscore.difficultyString() + ")"
+            str += String(highscore.score) + " (" + highscore.difficultyString() + ")"
             break;
         case 2:
             let highscore = highscoreManager.highscores[Game.balloon]![indexPath.row]
-            cell.textLabel?.text = String(highscore.score) + " (" + highscore.difficultyString() + ")"
+            str += String(highscore.score) + " (" + highscore.difficultyString() + ")"
             break;
         default:
             break;
         }
         
+        cell.textLabel?.text = str
+        
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
     

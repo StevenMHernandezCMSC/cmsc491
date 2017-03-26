@@ -34,8 +34,6 @@ class HighscoreManager {
             }
         }
         
-        print(highscores[game]!)
-        
         self.storeAll()
     }
     
