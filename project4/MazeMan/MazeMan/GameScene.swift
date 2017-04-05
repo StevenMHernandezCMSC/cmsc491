@@ -9,6 +9,7 @@
 import SpriteKit
 import GameplayKit
 
+let HEIGHT = 1024
 let WIDTH = 1366
 let BLOCKSIZE = 99
 let LEFT_PADDING = (WIDTH % BLOCKSIZE) / 2
@@ -21,25 +22,55 @@ class GameScene: SKScene {
         self.caveman = self.childNode(withName: "//caveman") as? SKSpriteNode
         self.caveman?.size.height = CGFloat(BLOCKSIZE)
         self.caveman?.size.width = CGFloat(BLOCKSIZE)
-        print(self.caveman?.position.x ?? "nothing")
         self.caveman?.position.x = CGFloat(LEFT_PADDING + (BLOCKSIZE / 2))
         self.caveman?.position.y = CGFloat(BLOCKSIZE * 3 / 2)
+        
+        self.renderTop()
         
         self.renderBottom()
         
         self.addAllGestureRecognizers()
     }
     
-    func renderBottom() {
+    func renderTop() {
         var i = BLOCKSIZE / 2 + LEFT_PADDING
+        
         while (i < WIDTH) {
-            let block = SKSpriteNode(imageNamed: "block")
-            block.position.x = CGFloat(i)
+            for r in 0...1 {
+                let block = SKSpriteNode(imageNamed: "block")
+                block.position.x = CGFloat(i)
+                block.position.y = CGFloat(HEIGHT - (BLOCKSIZE/2) - (r * BLOCKSIZE))
+                block.size.height = CGFloat(BLOCKSIZE)
+                block.size.width = CGFloat(BLOCKSIZE)
+                self.addChild(block)
+            }
+            
+            i += BLOCKSIZE
+        }
+    }
+    
+    func renderBottom() {
+        var i = 0
+
+        // decide where the 2 water blocks go
+        let block1 = arc4random_uniform(UInt32(WIDTH / BLOCKSIZE))
+        let block2 = block1 == 0 ? arc4random_uniform(UInt32(WIDTH / BLOCKSIZE)) + 1 : arc4random_uniform(block1 + 1)
+        
+        print(block1, block2)
+
+        while (i * BLOCKSIZE) + (BLOCKSIZE / 2) + LEFT_PADDING < WIDTH {
+            let block: SKSpriteNode
+            if UInt32(i) == block1 || UInt32(i) == block2 {
+                block = SKSpriteNode(imageNamed: "water")
+            } else {
+                block = SKSpriteNode(imageNamed: "block")
+            }
+            block.position.x = CGFloat((i * BLOCKSIZE) + BLOCKSIZE / 2 + LEFT_PADDING)
             block.position.y = CGFloat(BLOCKSIZE/2)
             block.size.height = CGFloat(BLOCKSIZE)
             block.size.width = CGFloat(BLOCKSIZE)
             self.addChild(block)
-            i += BLOCKSIZE
+            i += 1
         }
     }
     
