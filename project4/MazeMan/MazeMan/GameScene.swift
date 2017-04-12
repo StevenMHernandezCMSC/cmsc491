@@ -75,6 +75,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.renderTop()
         
+        self.renderSides()
+        
         self.renderBottom()
         
         self.addBitMasks()
@@ -199,13 +201,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func renderSides() {
+        let leftBlock = SKSpriteNode()
+        self.createBlock(block: leftBlock, x: LEFT_PADDING - 1, y: HEIGHT / 2, width: 2, height: HEIGHT, category: PhysicsCategory.block.rawValue)
+        
+        let rightBlock = SKSpriteNode()
+        self.createBlock(block: rightBlock, x: WIDTH - LEFT_PADDING + 1, y: HEIGHT / 2, width: 2, height: HEIGHT, category: PhysicsCategory.block.rawValue)
+    }
+    
     func renderBottom() {
         var i = 0
-
+        
         // decide where the 2 water blocks go
         let block1 = arc4random_uniform(UInt32(COLUMN_COUNT))
         let block2 = block1 == 0 ? arc4random_uniform(UInt32(COLUMN_COUNT)) + 1 : arc4random_uniform(block1 + 1)
-
+        
         while (i * BLOCKSIZE) + (BLOCKSIZE / 2) + LEFT_PADDING < WIDTH {
             let block: SKSpriteNode
             let category: UInt32
@@ -224,10 +234,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func createBlock(block: SKSpriteNode, x: Int, y: Int, category: UInt32) {
+        self.createBlock(block: block, x: x, y: y, width: BLOCKSIZE, height: BLOCKSIZE, category: category)
+    }
+    
+    func createBlock(block: SKSpriteNode, x: Int, y: Int, width: Int, height: Int, category: UInt32) {
         block.position.x = CGFloat(x)
         block.position.y = CGFloat(y)
-        block.size.height = CGFloat(BLOCKSIZE)
-        block.size.width = CGFloat(BLOCKSIZE)
+        block.size.height = CGFloat(height)
+        block.size.width = CGFloat(width)
         self.addChild(block)
         self.blocks.append(block)
         block.physicsBody = SKPhysicsBody(rectangleOf: block.size)
@@ -314,7 +328,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
      */
     func didContact(_ contact: SKPhysicsContact, _ a: UInt32, _ b: UInt32) -> Bool {
         return (contact.bodyA.categoryBitMask == a && contact.bodyB.categoryBitMask == b) ||
-               (contact.bodyA.categoryBitMask == b && contact.bodyB.categoryBitMask == a)
+            (contact.bodyA.categoryBitMask == b && contact.bodyB.categoryBitMask == a)
     }
     
     
