@@ -106,7 +106,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.renderGUI()
         
-        self.addRandomBlock("star", PhysicsCategory.star.rawValue)
+        let _ = self.addRandomBlock("star", PhysicsCategory.star.rawValue)
         
         self.addFood()
         
@@ -475,7 +475,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             self.removeChildren(in: [star!])
             
-            self.addRandomBlock("star", PhysicsCategory.star.rawValue)
+            let _ = self.addRandomBlock("star", PhysicsCategory.star.rawValue)
         }
         
         if self.didContact(contact, PhysicsCategory.caveman.rawValue, PhysicsCategory.dino.rawValue) {
