@@ -32,8 +32,9 @@ enum PhysicsCategory : UInt32 {
     case block = 2
     case water = 4
     case star = 8
-    case dino = 16
-    case immuneDino = 32
+    case food = 16
+    case dino = 32
+    case immuneDino = 64
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -106,6 +107,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.renderGUI()
         
         self.addRandomBlock("star", PhysicsCategory.star.rawValue)
+        
+        self.addFood()
         
         self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(GameScene.addRandomBlockBlock), userInfo: nil, repeats: true)
         
@@ -320,15 +323,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         print("player died. forever ey", livesRemaining)
     }
     
-    func addRandomBlockBlock() {
-        self.addRandomBlock("block", PhysicsCategory.block.rawValue)
+    func addRandomBlockBlock() -> SKSpriteNode {
+        return self.addRandomBlock("block", PhysicsCategory.block.rawValue)
     }
     
     /**
      * Add random block to the center. Max 15 blocks,
      * afterwhich we invalidate the timer.
      */
-    func addRandomBlock(_ name: String, _ category: UInt32) {
+    func addRandomBlock(_ name: String, _ category: UInt32) -> SKSpriteNode {
         var column = 0
         var row = 0
         
@@ -349,6 +352,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if (self.innerBlocks.count >= MAX_BLOCK_COUNT) {
             self.timer?.invalidate()
         }
+        
+        return block
     }
     
     func renderTop() {
@@ -421,7 +426,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.caveman?.physicsBody = SKPhysicsBody(rectangleOf: (self.caveman?.size)!)
         self.caveman?.physicsBody?.affectedByGravity =  false
         self.caveman?.physicsBody?.categoryBitMask = PhysicsCategory.caveman.rawValue
-        self.caveman?.physicsBody?.contactTestBitMask = PhysicsCategory.block.rawValue | PhysicsCategory.water.rawValue | PhysicsCategory.star.rawValue | PhysicsCategory.dino.rawValue
+        self.caveman?.physicsBody?.contactTestBitMask = PhysicsCategory.block.rawValue | PhysicsCategory.water.rawValue | PhysicsCategory.star.rawValue | PhysicsCategory.food.rawValue | PhysicsCategory.dino.rawValue
     }
     
     func addAllGestureRecognizers() {
@@ -492,6 +497,42 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
         }
+        
+        if self.didContact(contact, PhysicsCategory.food.rawValue, PhysicsCategory.caveman.rawValue) {
+            self.player.incrementEnergy(50)
+            
+            let food = contact.bodyA.categoryBitMask == PhysicsCategory.star.rawValue ? contact.bodyA.node : contact.bodyB.node
+            
+            let foodPosition = self.findBlockInInnerBlocksDictionary(node: food as! SKSpriteNode)
+            
+            self.innerBlocks.removeValue(forKey: foodPosition)
+            
+            self.removeChildren(in: [food!])
+            
+            self.addFood()
+        }
+        
+        if self.didContact(contact, PhysicsCategory.food.rawValue, PhysicsCategory.dino.rawValue) {
+            let food = contact.bodyA.categoryBitMask == PhysicsCategory.food.rawValue ? contact.bodyA.node : contact.bodyB.node
+            
+            let foodPosition = self.findBlockInInnerBlocksDictionary(node: food as! SKSpriteNode)
+            
+            self.innerBlocks.removeValue(forKey: foodPosition)
+            
+            self.removeChildren(in: [food!])
+            
+            self.timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(GameScene.addFood), userInfo: nil, repeats: false)
+            
+        }
+    }
+    
+    func addFood() {
+        let foodBlock = self.addRandomBlock("food", PhysicsCategory.food.rawValue)
+        
+        foodBlock.physicsBody = SKPhysicsBody(rectangleOf: foodBlock.size)
+        foodBlock.physicsBody?.affectedByGravity =  false
+        foodBlock.physicsBody?.categoryBitMask = PhysicsCategory.food.rawValue
+        foodBlock.physicsBody?.contactTestBitMask = PhysicsCategory.dino.rawValue
     }
     
     /*

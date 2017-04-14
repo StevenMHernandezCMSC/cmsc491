@@ -69,6 +69,12 @@ class Player {
         }
     }
     
+    func incrementEnergy(_ value: Int) {
+        self.energy += value
+        
+        self.rerenderCallback!()
+    }
+    
     func incrementStar(_ value: Int) {
         self.stars += value
         
