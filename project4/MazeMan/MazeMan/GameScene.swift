@@ -25,12 +25,15 @@ let MAX_BLOCK_COUNT = 15
 let count = COLUMN_COUNT * ROW_COUNT
 
 let SPEED = 0.2
+let ENEMY_SPEED_UP = 0.5 // .5 = 200x faster
 
 enum PhysicsCategory : UInt32 {
     case caveman = 1
     case block = 2
     case water = 4
     case star = 8
+    case dino = 16
+    case immuneDino = 32
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -38,10 +41,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var caveman : SKSpriteNode?
     
     private var blocks = [SKSpriteNode]()
+    private var waterBlocks = [SKSpriteNode]()
     
     private var innerBlocksPlaced = 0
     
     private var innerBlocks = [Int: SKSpriteNode]()
+    
+    /*
+     * DINO ATTRIBUTES
+     * These should really be seperated to their own files.
+     */
+    private var dino1 = SKSpriteNode(imageNamed: "dino1")
+    private var dino1Direction:Bool = true
+    
+    private var dino2 = SKSpriteNode(imageNamed: "dino2")
+    private var dino2Direction:Bool = true
+    
+    private var dino3 = SKSpriteNode(imageNamed: "dino3")
+    private var dino3Direction:Bool = true
+    
+    private var dino4 = SKSpriteNode(imageNamed: "dino4")
+    private var dino4Direction:Bool = true
     
     private var starLabel = SKLabelNode(fontNamed: "Arial")
     private var rockLabel = SKLabelNode(fontNamed: "Arial")
@@ -88,6 +108,151 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addRandomBlock("star", PhysicsCategory.star.rawValue)
         
         self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(GameScene.addRandomBlockBlock), userInfo: nil, repeats: true)
+        
+        self.addDino1();
+        self.addDino2();
+        self.addDino3();
+        self.addDino4();
+    }
+    
+    /**
+     * DINO METHODS
+     * These should really be placed into their own files.
+     */
+    
+    func addDino1() {
+        let waterBlock = self.waterBlocks[Int(arc4random_uniform(UInt32(self.waterBlocks.count)))]
+        
+        self.dino1 = SKSpriteNode(imageNamed: "dino1")
+        
+        self.createBlock(block: self.dino1, x: Int(waterBlock.position.x), y: Int(waterBlock.position.y), category: PhysicsCategory.dino.rawValue)
+        
+        self.moveDino1()
+    }
+    
+    func moveDino1() {
+        self.dino1Direction = !self.dino1Direction
+        
+        let wait = SKAction.wait(forDuration: 2.0, withRange: 1.0)
+        
+        let action = self.dino1Direction
+            ? SKAction.move(by: CGVector(dx: 0, dy: -BLOCKSIZE * 3), duration: 3 * ENEMY_SPEED_UP)
+            : SKAction.move(by: CGVector(dx: 0, dy: BLOCKSIZE * 3), duration: 3 * ENEMY_SPEED_UP)
+        
+        self.dino1.run(SKAction.sequence([wait, action])) {
+            self.moveDino1()
+        }
+    }
+    
+    func removeDino1() {
+        self.removeChildren(in: [self.dino1])
+        
+        let respawnTime = Int(arc4random_uniform(5))
+        
+        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino1), userInfo: nil, repeats: false)
+    }
+    
+    func addDino2() {
+        self.dino2 = SKSpriteNode(imageNamed: "dino2")
+        
+        let randomRow = Int(arc4random_uniform(UInt32(ROW_COUNT) - 3)) + 1
+        
+        let y = randomRow * BLOCKSIZE + HALFBLOCK + TOP_PADDING
+        
+        self.createBlock(block: self.dino2, x: WIDTH - BLOCKSIZE - LEFT_PADDING, y: y, category: PhysicsCategory.dino.rawValue)
+        
+        self.moveDino2()
+    }
+    
+    func moveDino2() {
+        self.dino2Direction = !self.dino2Direction
+        
+        let wait = SKAction.wait(forDuration: 2.0, withRange: 1.0)
+        
+        let action = self.dino2Direction
+            ? SKAction.move(by: CGVector(dx: BLOCKSIZE * 9, dy: 0), duration: 9 * ENEMY_SPEED_UP)
+            : SKAction.move(by: CGVector(dx: -BLOCKSIZE * 9, dy: 0), duration: 9 * ENEMY_SPEED_UP)
+        
+        
+        self.dino2.xScale = self.dino2Direction ? -1 : 1
+        
+        self.dino2.run(SKAction.sequence([wait, action])) {
+            self.moveDino2()
+        }
+    }
+    
+    func removeDino2() {
+        self.removeChildren(in: [self.dino2])
+        
+        let respawnTime = Int(arc4random_uniform(5))
+        
+        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino2), userInfo: nil, repeats: false)
+    }
+    
+    func addDino3() {
+        self.dino3 = SKSpriteNode(imageNamed: "dino3")
+        
+        self.dino3.xScale = -1
+        
+        self.createBlock(block: self.dino3, x: LEFT_PADDING + HALFBLOCK, y: HEIGHT - (2 * BLOCKSIZE) - TOP_PADDING - HALFBLOCK, category: PhysicsCategory.dino.rawValue)
+        
+        self.moveDino3()
+    }
+    
+    func moveDino3() {
+        self.dino3Direction = !self.dino3Direction
+        
+        let wait = SKAction.wait(forDuration: 2.0, withRange: 1.0)
+        
+        let action = self.dino3Direction
+            ? SKAction.move(by: CGVector(dx: 0, dy: BLOCKSIZE * 3), duration: 3 * ENEMY_SPEED_UP)
+            : SKAction.move(by: CGVector(dx: 0, dy: -BLOCKSIZE * 3), duration: 3 * ENEMY_SPEED_UP)
+        
+        self.dino3.run(SKAction.sequence([wait, action])) {
+            self.moveDino3()
+        }
+    }
+    
+    func removeDino3() {
+        self.removeChildren(in: [self.dino3])
+        
+        let respawnTime = Int(arc4random_uniform(5))
+        
+        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino3), userInfo: nil, repeats: false)
+    }
+    
+    func addDino4() {
+        self.dino4 = SKSpriteNode(imageNamed: "dino4")
+        
+        self.createBlock(block: self.dino4, x: BLOCKSIZE, y: HEIGHT - BLOCKSIZE * 2, category: PhysicsCategory.immuneDino.rawValue)
+        
+        self.dino4.zPosition = 99
+        
+        self.moveDino4()
+    }
+    
+    func moveDino4() {
+        self.dino4Direction = !self.dino4Direction
+        
+        let wait = SKAction.wait(forDuration: 2.0, withRange: 1.0)
+        
+        let distance = WIDTH - BLOCKSIZE - (2 * LEFT_PADDING)
+        
+        let action = self.dino4Direction
+            ? SKAction.move(by: CGVector(dx: -distance, dy: 0), duration: TimeInterval(WIDTH) * ENEMY_SPEED_UP / TimeInterval(BLOCKSIZE))
+            : SKAction.move(by: CGVector(dx: distance, dy: 0), duration: TimeInterval(WIDTH) * ENEMY_SPEED_UP / TimeInterval(BLOCKSIZE))
+        
+        self.dino4.run(SKAction.sequence([wait, action])) {
+            self.moveDino4()
+        }
+    }
+    
+    func removeDino4() {
+        self.removeChildren(in: [self.dino1])
+        
+        let respawnTime = Int(arc4random_uniform(5))
+        
+        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino4), userInfo: nil, repeats: false)
     }
     
     func renderGUI() {
@@ -222,6 +387,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if UInt32(i) == block1 || UInt32(i) == block2 {
                 block = SKSpriteNode(imageNamed: "water")
                 category = PhysicsCategory.water.rawValue
+                self.waterBlocks.append(block)
             } else {
                 block = SKSpriteNode(imageNamed: "block")
                 category = PhysicsCategory.block.rawValue
@@ -255,7 +421,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.caveman?.physicsBody = SKPhysicsBody(rectangleOf: (self.caveman?.size)!)
         self.caveman?.physicsBody?.affectedByGravity =  false
         self.caveman?.physicsBody?.categoryBitMask = PhysicsCategory.caveman.rawValue
-        self.caveman?.physicsBody?.contactTestBitMask = PhysicsCategory.block.rawValue | PhysicsCategory.water.rawValue | PhysicsCategory.star.rawValue
+        self.caveman?.physicsBody?.contactTestBitMask = PhysicsCategory.block.rawValue | PhysicsCategory.water.rawValue | PhysicsCategory.star.rawValue | PhysicsCategory.dino.rawValue
     }
     
     func addAllGestureRecognizers() {
@@ -283,8 +449,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
-        print(contact.bodyA.categoryBitMask, contact.bodyB.categoryBitMask)
-        
         if self.didContact(contact, PhysicsCategory.caveman.rawValue, PhysicsCategory.block.rawValue) {
             self.caveman?.removeAllActions()
         }
@@ -307,6 +471,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.removeChildren(in: [star!])
             
             self.addRandomBlock("star", PhysicsCategory.star.rawValue)
+        }
+        
+        if self.didContact(contact, PhysicsCategory.caveman.rawValue, PhysicsCategory.dino.rawValue) {
+            let dino = contact.bodyA.categoryBitMask == PhysicsCategory.dino.rawValue ? contact.bodyA.node : contact.bodyB.node
+            
+            if let d = dino as? SKSpriteNode {
+                switch(d) {
+                case self.dino1:
+                    let _ = self.player.decrementEnergy(60)
+                    break
+                case self.dino2:
+                    let _ = self.player.decrementEnergy(80)
+                    break
+                case self.dino3:
+                    let _ = self.player.decrementEnergy(100)
+                    break
+                default:
+                    break
+                }
+            }
         }
     }
     
