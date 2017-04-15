@@ -86,6 +86,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var player = Player()
     
     var timer: Timer?
+    var gravityTimer: Timer?
     
     func reset() {
         self.blocks = [SKSpriteNode]()
@@ -142,10 +143,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addDino2()
         self.addDino3()
         self.addDino4()
+        
+        self.prepareGravityTime()
     }
     
     override func willMove(from view: SKView) {
         self.timer?.invalidate()
+        self.gravityTimer?.invalidate()
         
         self.removeAllChildren()
         
@@ -154,6 +158,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 view.removeGestureRecognizer(gesture)
             }
         }
+    }
+    
+    func prepareGravityTime() {
+        var time = TimeInterval(arc4random_uniform(UInt32(20))) + 40
+            
+        self.gravityTimer = Timer.scheduledTimer(timeInterval: time, target: self, selector: #selector(GameScene.enableGravityTime), userInfo: nil, repeats: false)
+    }
+    
+    func enableGravityTime() {
+        self.caveman?.physicsBody?.affectedByGravity = true
+        self.gravityTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(GameScene.disableGravityTime), userInfo: nil, repeats: false)
+    }
+    
+    func disableGravityTime() {
+        self.caveman?.physicsBody?.affectedByGravity = false
+        self.prepareGravityTime()
     }
     
     /**
@@ -515,7 +535,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.caveman?.physicsBody?.affectedByGravity =  false
         self.caveman?.physicsBody?.categoryBitMask = PhysicsCategory.caveman.rawValue
         self.caveman?.physicsBody?.contactTestBitMask = PhysicsCategory.block.rawValue | PhysicsCategory.water.rawValue | PhysicsCategory.star.rawValue | PhysicsCategory.food.rawValue | PhysicsCategory.dino.rawValue | PhysicsCategory.fire.rawValue
-        self.caveman?.physicsBody?.collisionBitMask = 0
+        self.caveman?.physicsBody?.collisionBitMask = PhysicsCategory.block.rawValue
     }
     
     func addAllGestureRecognizers() {
@@ -626,8 +646,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.moveDino3()
             }
         }
-        
-        print(contact.bodyA.categoryBitMask, contact.bodyB.categoryBitMask)
         
         if self.didContact(contact, PhysicsCategory.rock.rawValue, PhysicsCategory.dino.rawValue) {
             let dino = contact.bodyA.categoryBitMask == PhysicsCategory.dino.rawValue ? contact.bodyA.node : contact.bodyB.node
