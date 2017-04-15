@@ -35,6 +35,7 @@ enum PhysicsCategory : UInt32 {
     case food = 16
     case dino = 32
     case immuneDino = 64
+    case rock = 128
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -130,6 +131,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.createBlock(block: self.dino1, x: Int(waterBlock.position.x), y: Int(waterBlock.position.y), category: PhysicsCategory.dino.rawValue)
         
+        self.dino1Direction = true
+        
         self.moveDino1()
     }
     
@@ -163,6 +166,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let y = randomRow * BLOCKSIZE + HALFBLOCK + TOP_PADDING
         
         self.createBlock(block: self.dino2, x: WIDTH - BLOCKSIZE - LEFT_PADDING, y: y, category: PhysicsCategory.dino.rawValue)
+        
+        self.dino2Direction = true
         
         self.moveDino2()
     }
@@ -198,6 +203,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.dino3.xScale = -1
         
         self.createBlock(block: self.dino3, x: LEFT_PADDING + HALFBLOCK, y: HEIGHT - (2 * BLOCKSIZE) - TOP_PADDING - HALFBLOCK, category: PhysicsCategory.dino.rawValue)
+        
+        self.dino3Direction = true
         
         self.moveDino3()
     }
@@ -427,6 +434,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.caveman?.physicsBody?.affectedByGravity =  false
         self.caveman?.physicsBody?.categoryBitMask = PhysicsCategory.caveman.rawValue
         self.caveman?.physicsBody?.contactTestBitMask = PhysicsCategory.block.rawValue | PhysicsCategory.water.rawValue | PhysicsCategory.star.rawValue | PhysicsCategory.food.rawValue | PhysicsCategory.dino.rawValue
+        self.caveman?.physicsBody?.collisionBitMask = 0
     }
     
     func addAllGestureRecognizers() {
@@ -439,6 +447,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                             swipe.addTarget(self, action: #selector(moveCaveman))
                             self.view?.addGestureRecognizer(swipe)
         }
+        
+        let tap = UITapGestureRecognizer()
+        tap.addTarget(self, action: #selector(throwRock))
+        self.view?.addGestureRecognizer(tap)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -522,7 +534,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.removeChildren(in: [food!])
             
             self.timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(GameScene.addFood), userInfo: nil, repeats: false)
+        }
+        
+        print(contact.bodyA.categoryBitMask, contact.bodyB.categoryBitMask)
+        
+        if self.didContact(contact, PhysicsCategory.rock.rawValue, PhysicsCategory.dino.rawValue) {
+            let dino = contact.bodyA.categoryBitMask == PhysicsCategory.dino.rawValue ? contact.bodyA.node : contact.bodyB.node
             
+            let dinoPosition = self.findBlockInInnerBlocksDictionary(node: dino as! SKSpriteNode)
+            
+            self.innerBlocks.removeValue(forKey: dinoPosition)
+            
+            // Random time between 1 and 5
+            let randomTime = TimeInterval(arc4random_uniform(4)) + 1
+            
+            if let d = dino as? SKSpriteNode {
+                switch (d) {
+                case self.dino1:
+                    let _ = Timer.scheduledTimer(timeInterval: randomTime, target: self, selector: #selector(GameScene.addDino1), userInfo: nil, repeats: false)
+                    break
+                case self.dino2:
+                    let _ = Timer.scheduledTimer(timeInterval: randomTime, target: self, selector: #selector(GameScene.addDino2), userInfo: nil, repeats: false)
+                    break
+                case self.dino3:
+                    let _ = Timer.scheduledTimer(timeInterval: randomTime, target: self, selector: #selector(GameScene.addDino3), userInfo: nil, repeats: false)
+                    break
+                default:
+                    break
+                }
+            }
+            
+            self.removeChildren(in: [dino!])
         }
     }
     
@@ -562,7 +604,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func moveCaveman(gesture: UIGestureRecognizer) {
-        
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
             self.caveman?.removeAllActions()
             
@@ -588,6 +629,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.caveman?.run(m, withKey: "caveman_moving")
             }
         }
-        
+    }
+    
+    func throwRock(gesture: UIGestureRecognizer) {
+        if let tapGesture = gesture as? UITapGestureRecognizer {
+            let block = SKSpriteNode(imageNamed: "rock")
+            var touchLocation: CGPoint = tapGesture.location(in: self.view)
+            touchLocation = self.convertPoint(fromView: touchLocation)
+            
+            let cm = self.caveman!
+            
+            self.createBlock(block: block, x: Int(cm.position.x + 1), y: Int(cm.position.y + 1), category: PhysicsCategory.rock.rawValue)
+            
+            block.physicsBody = SKPhysicsBody(rectangleOf: block.size)
+            block.physicsBody?.affectedByGravity =  false
+            block.physicsBody?.categoryBitMask = PhysicsCategory.rock.rawValue
+            block.physicsBody?.contactTestBitMask = PhysicsCategory.dino.rawValue
+            block.physicsBody?.collisionBitMask = 0
+            
+            let distance = sqrt(pow(cm.position.x - touchLocation.x, 2.0) + pow(cm.position.y - touchLocation.y, 2.0))
+            
+            let dx = Int(touchLocation.x - cm.position.x)
+            let dy = Int(touchLocation.y - cm.position.y)
+            
+            var movement = SKAction.move(by: CGVector(dx: dx, dy: dy), duration: SPEED * Double(distance / 50))
+            movement = SKAction.repeatForever(movement)
+            block.run(movement)
+        }
     }
 }
