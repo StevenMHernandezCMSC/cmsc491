@@ -277,7 +277,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, AVAudioPlayerDelegate {
         self.dino3.physicsBody?.affectedByGravity =  false
         self.dino3.physicsBody?.categoryBitMask = PhysicsCategory.dino.rawValue
         self.dino3.physicsBody?.contactTestBitMask = PhysicsCategory.block.rawValue
-        self.dino3.physicsBody?.collisionBitMask = 0
+        self.dino3.physicsBody?.collisionBitMask = PhysicsCategory.block.rawValue
         
         self.dino1Direction = true
         
@@ -389,6 +389,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate, AVAudioPlayerDelegate {
         energyLabel.fontColor = .black
         energyLabel.position.x = CGFloat(HALFBLOCK + LEFT_PADDING) + (CGFloat(BLOCKSIZE) * 3.5)
         energyLabel.position.y = CGFloat(HALFBLOCK)
+        
+        
+        starIcon.zPosition = 98
+        rockIcon.zPosition = 98
+        livesIcon.zPosition = 98
+        energyIcon.zPosition = 98
         
         self.addChild(starIcon)
         self.addChild(rockIcon)
@@ -692,9 +698,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate, AVAudioPlayerDelegate {
             
             self.statusLabel.text = "You killed a dino"
             
-            let name = (GKRandomSource.sharedRandom().arrayByShufflingObjects(in: ["dino_1", "dino_2", "dino_3"]) as! [String])[0]
+            let sounds = ["dino_1", "dino_2", "dino_3"]
             
-            self.playSound(name: name)
+            let names = (GKRandomSource.sharedRandom().arrayByShufflingObjects(in: sounds) as! [String])
+            
+            print(names)
+            
+            self.playSound(name: names[0])
         }
         
         if self.didContact(contact, PhysicsCategory.caveman.rawValue, PhysicsCategory.fire.rawValue) {
