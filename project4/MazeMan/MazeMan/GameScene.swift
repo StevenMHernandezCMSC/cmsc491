@@ -24,8 +24,8 @@ let LEFT_PADDING = (WIDTH % BLOCKSIZE) / 2
 let MAX_BLOCK_COUNT = 15
 let count = COLUMN_COUNT * ROW_COUNT
 
-let SPEED = 0.2
-let ENEMY_SPEED_UP = 0.5 // .5 = 200x faster
+let SPEED = 0.3
+let ENEMY_SPEED_UP = 0.2 // .5 = 200x faster
 
 enum PhysicsCategory : UInt32 {
     case caveman = 1
@@ -48,6 +48,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var innerBlocksPlaced = 0
     
     private var innerBlocks = [Int: SKSpriteNode]()
+    
+    private var randomBlockCount = 0
     
     /*
      * DINO ATTRIBUTES
@@ -155,7 +157,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let respawnTime = Int(arc4random_uniform(5))
         
-        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino1), userInfo: nil, repeats: false)
+        Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino1), userInfo: nil, repeats: false)
     }
     
     func addDino2() {
@@ -194,7 +196,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let respawnTime = Int(arc4random_uniform(5))
         
-        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino2), userInfo: nil, repeats: false)
+        Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino2), userInfo: nil, repeats: false)
     }
     
     func addDino3() {
@@ -239,7 +241,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let respawnTime = Int(arc4random_uniform(5))
         
-        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino3), userInfo: nil, repeats: false)
+        Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino3), userInfo: nil, repeats: false)
     }
     
     func addDino4() {
@@ -273,7 +275,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let respawnTime = Int(arc4random_uniform(5))
         
-        self.timer = Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino4), userInfo: nil, repeats: false)
+        Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino4), userInfo: nil, repeats: false)
     }
     
     func renderGUI() {
@@ -333,16 +335,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func updateGUI() {
         self.starLabel.text = String(self.player.stars)
         self.rockLabel.text = String(self.player.rocks)
-        self.livesLabel.text = String(self.player.lives)
-        self.energyLabel.text = String(self.player.energy)
+        self.livesLabel.text = String(self.player.energy / 100)
+        self.energyLabel.text = String(self.player.energy % 100)
     }
     
-    func playerDied(_ livesRemaining: Int) {
-        print("player died. forever ey", livesRemaining)
+    func playerDied() {
+        // TODO: reset
+        print("player died. forever ey")
     }
     
     func addRandomBlockBlock() -> SKSpriteNode {
-        return self.addRandomBlock("block", PhysicsCategory.block.rawValue)
+        let block = self.addRandomBlock("block", PhysicsCategory.block.rawValue)
+        
+        self.randomBlockCount += 1
+        
+        print(self.randomBlockCount, MAX_BLOCK_COUNT)
+        
+        if self.randomBlockCount >= MAX_BLOCK_COUNT {
+            self.timer?.invalidate()
+        }
+        
+        return block
     }
     
     /**
@@ -366,10 +379,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.createBlock(block: block, x: x, y: y, category: category)
         
         self.innerBlocks[COLUMN_COUNT * column + row] = block
-        
-        if (self.innerBlocks.count >= MAX_BLOCK_COUNT) {
-            self.timer?.invalidate()
-        }
         
         return block
     }
@@ -482,7 +491,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         if self.didContact(contact, PhysicsCategory.caveman.rawValue, PhysicsCategory.water.rawValue) {
-            let _ = self.player.loseLife()
+            let _ = self.player.decrementEnergy(self.player.energy)
             
             self.caveman?.removeAllActions()
         }
@@ -544,13 +553,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             self.removeChildren(in: [food!])
             
-            self.timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(GameScene.addFood), userInfo: nil, repeats: false)
+            Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(GameScene.addFood), userInfo: nil, repeats: false)
         }
         
         if self.didContact(contact, PhysicsCategory.block.rawValue, PhysicsCategory.dino.rawValue) || self.didContact(contact, PhysicsCategory.water.rawValue, PhysicsCategory.dino.rawValue) {
             let dino = contact.bodyA.categoryBitMask == PhysicsCategory.dino.rawValue ? contact.bodyA.node : contact.bodyB.node
-            
-            print(dino)
             
             if (dino == self.dino3) {
                 self.dino3.removeAllActions()
@@ -656,28 +663,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func throwRock(gesture: UIGestureRecognizer) {
         if let tapGesture = gesture as? UITapGestureRecognizer {
-            let block = SKSpriteNode(imageNamed: "rock")
-            var touchLocation: CGPoint = tapGesture.location(in: self.view)
-            touchLocation = self.convertPoint(fromView: touchLocation)
-            
-            let cm = self.caveman!
-            
-            self.createBlock(block: block, x: Int(cm.position.x + 1), y: Int(cm.position.y + 1), category: PhysicsCategory.rock.rawValue)
-            
-            block.physicsBody = SKPhysicsBody(rectangleOf: block.size)
-            block.physicsBody?.affectedByGravity =  false
-            block.physicsBody?.categoryBitMask = PhysicsCategory.rock.rawValue
-            block.physicsBody?.contactTestBitMask = PhysicsCategory.dino.rawValue
-            block.physicsBody?.collisionBitMask = 0
-            
-            let distance = sqrt(pow(cm.position.x - touchLocation.x, 2.0) + pow(cm.position.y - touchLocation.y, 2.0))
-            
-            let dx = Int(touchLocation.x - cm.position.x)
-            let dy = Int(touchLocation.y - cm.position.y)
-            
-            var movement = SKAction.move(by: CGVector(dx: dx, dy: dy), duration: SPEED * Double(distance / 50))
-            movement = SKAction.repeatForever(movement)
-            block.run(movement)
+            if self.player.rocks > 0 {
+                self.player.decrementRock()
+                let block = SKSpriteNode(imageNamed: "rock")
+                var touchLocation: CGPoint = tapGesture.location(in: self.view)
+                touchLocation = self.convertPoint(fromView: touchLocation)
+                
+                let cm = self.caveman!
+                
+                self.createBlock(block: block, x: Int(cm.position.x + 1), y: Int(cm.position.y + 1), category: PhysicsCategory.rock.rawValue)
+                
+                block.physicsBody = SKPhysicsBody(rectangleOf: block.size)
+                block.physicsBody?.affectedByGravity =  false
+                block.physicsBody?.categoryBitMask = PhysicsCategory.rock.rawValue
+                block.physicsBody?.contactTestBitMask = PhysicsCategory.dino.rawValue
+                block.physicsBody?.collisionBitMask = 0
+                
+                let distance = sqrt(pow(cm.position.x - touchLocation.x, 2.0) + pow(cm.position.y - touchLocation.y, 2.0))
+                
+                let dx = Int(touchLocation.x - cm.position.x)
+                let dy = Int(touchLocation.y - cm.position.y)
+                
+                var movement = SKAction.move(by: CGVector(dx: dx, dy: dy), duration: SPEED * Double(distance / 50))
+                movement = SKAction.repeatForever(movement)
+                block.run(movement)
+            }
         }
     }
 }
