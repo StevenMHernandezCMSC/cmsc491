@@ -27,6 +27,8 @@ let count = COLUMN_COUNT * ROW_COUNT
 let SPEED = 0.3
 let ENEMY_SPEED_UP = 0.2 // .5 = 200x faster
 
+var highscores = [Int](arrayLiteral: 0,0,0)
+
 enum PhysicsCategory : UInt32 {
     case caveman = 1
     case block = 2
@@ -50,6 +52,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var innerBlocks = [Int: SKSpriteNode]()
     
     private var randomBlockCount = 0
+    
+    private var transitioning = false
     
     /*
      * DINO ATTRIBUTES
@@ -82,10 +86,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var timer: Timer?
     
+    func reset() {
+        self.blocks = [SKSpriteNode]()
+        self.waterBlocks = [SKSpriteNode]()
+        
+        self.innerBlocksPlaced = 0
+        
+        self.innerBlocks = [Int: SKSpriteNode]()
+        
+        self.randomBlockCount = 0
+        
+        self.transitioning = false
+    }
+    
     override func didMove(to view: SKView) {
+        self.reset()
+        
         self.physicsWorld.contactDelegate = self
         
-        self.caveman = self.childNode(withName: "//caveman") as? SKSpriteNode
+        self.caveman = SKSpriteNode(imageNamed: "caveman")
         self.caveman?.size.height = CGFloat(BLOCKSIZE) * 0.8
         self.caveman?.size.width = CGFloat(BLOCKSIZE) * 0.8
         self.caveman?.position.x = CGFloat(LEFT_PADDING + (BLOCKSIZE / 2))
@@ -93,6 +112,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.caveman?.xScale = -1
         self.caveman?.physicsBody?.isDynamic =  false
         self.caveman?.physicsBody?.allowsRotation =  false
+        self.addChild(self.caveman!)
         
         self.player.rerenderCallback = updateGUI
         self.player.deathCallback = playerDied
@@ -109,16 +129,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.renderGUI()
         
+        self.player.reset()
+        
         let _ = self.addRandomBlock("star", PhysicsCategory.star.rawValue)
         
         self.addFood()
         
         self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(GameScene.addRandomBlockBlock), userInfo: nil, repeats: true)
         
-        self.addDino1();
-        self.addDino2();
-        self.addDino3();
-        self.addDino4();
+        self.addDino1()
+        self.addDino2()
+        self.addDino3()
+        self.addDino4()
+    }
+    
+    override func willMove(from view: SKView) {
+        self.timer?.invalidate()
+        
+        self.removeAllChildren()
+        
+        if view.gestureRecognizers != nil {
+            for gesture in view.gestureRecognizers! {
+                view.removeGestureRecognizer(gesture)
+            }
+        }
     }
     
     /**
@@ -340,16 +374,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func playerDied() {
-        // TODO: reset
-        print("player died. forever ey")
+        if !self.transitioning {
+            let transition = SKTransition.reveal(with: SKTransitionDirection.left, duration: 1.0)
+            
+            let nextScene = GameOverScene(size: (self.scene?.size)!)
+            nextScene.gameScene = self
+            nextScene.player = self.player
+            nextScene.scaleMode = SKSceneScaleMode.aspectFill
+            
+            self.transitioning = true
+            self.scene?.view?.presentScene(nextScene, transition: transition)
+            
+            self.player.stop()
+        }
     }
     
     func addRandomBlockBlock() -> SKSpriteNode {
         let block = self.addRandomBlock("block", PhysicsCategory.block.rawValue)
         
         self.randomBlockCount += 1
-        
-        print(self.randomBlockCount, MAX_BLOCK_COUNT)
         
         if self.randomBlockCount >= MAX_BLOCK_COUNT {
             self.timer?.invalidate()
@@ -533,7 +576,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if self.didContact(contact, PhysicsCategory.food.rawValue, PhysicsCategory.caveman.rawValue) {
             self.player.incrementEnergy(50)
             
-            let food = contact.bodyA.categoryBitMask == PhysicsCategory.star.rawValue ? contact.bodyA.node : contact.bodyB.node
+            let food = contact.bodyA.categoryBitMask == PhysicsCategory.food.rawValue ? contact.bodyA.node : contact.bodyB.node
             
             let foodPosition = self.findBlockInInnerBlocksDictionary(node: food as! SKSpriteNode)
             

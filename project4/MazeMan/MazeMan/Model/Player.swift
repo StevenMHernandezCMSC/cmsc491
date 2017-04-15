@@ -30,15 +30,12 @@ class Player {
      */
     public var deathCallback: (() -> ())?
     
-    init() {
-        self.startTimers()
-    }
-    
     func reset() {
         self.energy = 300
         self.rocks = 10
         self.stars = 0
         self.startTimers()
+        self.rerenderCallback!()
     }
     
     func stop() {
