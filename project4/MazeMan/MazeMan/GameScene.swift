@@ -82,6 +82,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var livesIcon = SKSpriteNode(imageNamed: "heart")
     private var energyIcon = SKSpriteNode(imageNamed: "battery")
     
+    private var statusLabel = SKLabelNode(fontNamed: "Arial")
+    private var statusPanel = SKSpriteNode(imageNamed: "game-status-panel")
+    
     // PLAYER:
     private var player = Player()
     
@@ -145,6 +148,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addDino4()
         
         self.prepareGravityTime()
+        
+        self.addPanel()
     }
     
     override func willMove(from view: SKView) {
@@ -160,18 +165,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func addPanel() {
+        self.statusPanel.position.y = CGFloat(HEIGHT - BLOCKSIZE)
+        self.statusPanel.position.x = CGFloat(WIDTH / 2)
+        self.statusPanel.size.height = CGFloat(BLOCKSIZE * 2)
+        self.statusPanel.size.width = CGFloat(WIDTH * 3 / 4)
+        self.statusPanel.zPosition = 9999
+        
+        self.statusLabel.position.x = self.statusPanel.position.x
+        self.statusLabel.position.y = self.statusPanel.position.y
+        self.statusLabel.zPosition = 99999
+        self.statusLabel.text = "Welcome to MazeMan!"
+        self.addChild(self.statusPanel)
+        self.addChild(self.statusLabel)
+    }
+    
     func prepareGravityTime() {
-        var time = TimeInterval(arc4random_uniform(UInt32(20))) + 40
+        let time = TimeInterval(arc4random_uniform(UInt32(20))) + 40
             
         self.gravityTimer = Timer.scheduledTimer(timeInterval: time, target: self, selector: #selector(GameScene.enableGravityTime), userInfo: nil, repeats: false)
     }
     
     func enableGravityTime() {
+        self.statusLabel.text = "Gravity Enabled!"
         self.caveman?.physicsBody?.affectedByGravity = true
         self.gravityTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(GameScene.disableGravityTime), userInfo: nil, repeats: false)
     }
     
     func disableGravityTime() {
+        self.statusLabel.text = "Gravity Disabled"
         self.caveman?.physicsBody?.affectedByGravity = false
         self.prepareGravityTime()
     }
@@ -191,6 +213,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.dino1Direction = true
         
         self.moveDino1()
+        
+        self.statusLabel.text = "A wild Dino1 Appeared"
     }
     
     func moveDino1() {
@@ -207,14 +231,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func removeDino1() {
-        self.removeChildren(in: [self.dino1])
-        
-        let respawnTime = Int(arc4random_uniform(5))
-        
-        Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino1), userInfo: nil, repeats: false)
-    }
-    
     func addDino2() {
         self.dino2 = SKSpriteNode(imageNamed: "dino2")
         
@@ -227,6 +243,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.dino2Direction = true
         
         self.moveDino2()
+        
+        self.statusLabel.text = "A wild Dino2 Appeared"
     }
     
     func moveDino2() {
@@ -246,14 +264,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func removeDino2() {
-        self.removeChildren(in: [self.dino2])
-        
-        let respawnTime = Int(arc4random_uniform(5))
-        
-        Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino2), userInfo: nil, repeats: false)
-    }
-    
     func addDino3() {
         self.dino3 = SKSpriteNode(imageNamed: "dino3")
         
@@ -270,6 +280,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.dino1Direction = true
         
         self.moveDino3()
+        
+        self.statusLabel.text = "A wild Dino3 Appeared"
     }
     
     func moveDino3() {
@@ -289,14 +301,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         self.dino3.run(SKAction.repeatForever(SKAction.move(by: CGVector(dx: dx * BLOCKSIZE, dy: dy * BLOCKSIZE), duration: 1 * ENEMY_SPEED_UP)))
-    }
-    
-    func removeDino3() {
-        self.removeChildren(in: [self.dino3])
-        
-        let respawnTime = Int(arc4random_uniform(5))
-        
-        Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino3), userInfo: nil, repeats: false)
     }
     
     func addDino4() {
@@ -340,14 +344,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.dino4.run(SKAction.sequence([wait, action])) {
             self.moveDino4()
         }
-    }
-    
-    func removeDino4() {
-        self.removeChildren(in: [self.dino1])
-        
-        let respawnTime = Int(arc4random_uniform(5))
-        
-        Timer.scheduledTimer(timeInterval: TimeInterval(respawnTime), target: self, selector: #selector(GameScene.addDino4), userInfo: nil, repeats: false)
     }
     
     func renderGUI() {
@@ -589,6 +585,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.removeChildren(in: [star!])
             
             let _ = self.addRandomBlock("star", PhysicsCategory.star.rawValue)
+            
+            self.statusLabel.text = "You collected a star!"
         }
         
         if self.didContact(contact, PhysicsCategory.caveman.rawValue, PhysicsCategory.dino.rawValue) {
@@ -609,6 +607,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     break
                 }
             }
+            
+            self.statusLabel.text = "Ouch! The dino got you!"
         }
         
         if self.didContact(contact, PhysicsCategory.food.rawValue, PhysicsCategory.caveman.rawValue) {
@@ -623,6 +623,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.removeChildren(in: [food!])
             
             self.addFood()
+            
+            self.statusLabel.text = "Nom Nom Nom"
         }
         
         if self.didContact(contact, PhysicsCategory.food.rawValue, PhysicsCategory.dino.rawValue) {
@@ -635,6 +637,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.removeChildren(in: [food!])
             
             Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(GameScene.addFood), userInfo: nil, repeats: false)
+            
+            
+            self.statusLabel.text = "Dino: Nom Nom Nom"
         }
         
         if self.didContact(contact, PhysicsCategory.block.rawValue, PhysicsCategory.dino.rawValue) || self.didContact(contact, PhysicsCategory.water.rawValue, PhysicsCategory.dino.rawValue) {
@@ -674,6 +679,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
             self.removeChildren(in: [dino!])
+            
+            self.statusLabel.text = "You killed a dino"
         }
         
         if self.didContact(contact, PhysicsCategory.caveman.rawValue, PhysicsCategory.fire.rawValue) {
@@ -682,12 +689,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let _ = self.player.decrementEnergy(100)
             
             fire?.removeFromParent()
+            
+            self.statusLabel.text = "Ouch! Fire!"
         }
         
         if self.didContact(contact, PhysicsCategory.rock.rawValue, PhysicsCategory.fire.rawValue) {
             let fire = contact.bodyA.categoryBitMask == PhysicsCategory.fire.rawValue ? contact.bodyA.node : contact.bodyB.node
             
             fire?.removeFromParent()
+            
+            self.statusLabel.text = "You extinguished the flame!"
         }
     }
     
