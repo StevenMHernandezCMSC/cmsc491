@@ -109,6 +109,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate, AVAudioPlayerDelegate {
     override func didMove(to view: SKView) {
         self.reset()
         
+        let bg = SKSpriteNode(imageNamed: "bg")
+        bg.zPosition = -99
+        bg.position.x = CGFloat(WIDTH / 2)
+        bg.position.y = CGFloat(HEIGHT / 2)
+        bg.size.width = CGFloat(WIDTH)
+        bg.size.height = CGFloat(HEIGHT)
+        
+        self.addChild(bg)
+        
         self.physicsWorld.contactDelegate = self
         
         self.caveman = SKSpriteNode(imageNamed: "caveman")
@@ -702,8 +711,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, AVAudioPlayerDelegate {
             
             let names = (GKRandomSource.sharedRandom().arrayByShufflingObjects(in: sounds) as! [String])
             
-            print(names)
-            
             self.playSound(name: names[0])
         }
         
@@ -816,6 +823,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, AVAudioPlayerDelegate {
                 var movement = SKAction.move(by: CGVector(dx: dx, dy: dy), duration: SPEED * Double(distance / 50))
                 movement = SKAction.repeatForever(movement)
                 block.run(movement)
+            } else {
+                self.statusLabel.text = "You are out of rocks!"
             }
         }
     }
