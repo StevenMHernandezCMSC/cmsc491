@@ -204,23 +204,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.createBlock(block: self.dino3, x: LEFT_PADDING + HALFBLOCK, y: HEIGHT - (2 * BLOCKSIZE) - TOP_PADDING - HALFBLOCK, category: PhysicsCategory.dino.rawValue)
         
-        self.dino3Direction = true
+        self.dino3.physicsBody = SKPhysicsBody(rectangleOf: self.dino3.size)
+        self.dino3.physicsBody?.affectedByGravity =  false
+        self.dino3.physicsBody?.categoryBitMask = PhysicsCategory.dino.rawValue
+        self.dino3.physicsBody?.contactTestBitMask = PhysicsCategory.block.rawValue
+        self.dino3.physicsBody?.collisionBitMask = 0
+        
+        self.dino1Direction = true
         
         self.moveDino3()
     }
     
     func moveDino3() {
-        self.dino3Direction = !self.dino3Direction
+        var dx = 0
+        var dy = 0
         
-        let wait = SKAction.wait(forDuration: 2.0, withRange: 1.0)
-        
-        let action = self.dino3Direction
-            ? SKAction.move(by: CGVector(dx: 0, dy: BLOCKSIZE * 3), duration: 3 * ENEMY_SPEED_UP)
-            : SKAction.move(by: CGVector(dx: 0, dy: -BLOCKSIZE * 3), duration: 3 * ENEMY_SPEED_UP)
-        
-        self.dino3.run(SKAction.sequence([wait, action])) {
-            self.moveDino3()
+        if arc4random_uniform(2) == 1 {
+            dx = arc4random_uniform(2) == 1 ? 1 : -1
+        } else {
+            dy = arc4random_uniform(2) == 1 ? 1 : -1
         }
+        
+        if dx == 1 {
+            self.dino3.xScale = 1
+        } else if dx == -1 {
+            self.dino3.xScale = -1
+        }
+        
+        self.dino3.run(SKAction.repeatForever(SKAction.move(by: CGVector(dx: dx * BLOCKSIZE, dy: dy * BLOCKSIZE), duration: 1 * ENEMY_SPEED_UP)))
     }
     
     func removeDino3() {
@@ -534,6 +545,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.removeChildren(in: [food!])
             
             self.timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(GameScene.addFood), userInfo: nil, repeats: false)
+        }
+        
+        if self.didContact(contact, PhysicsCategory.block.rawValue, PhysicsCategory.dino.rawValue) || self.didContact(contact, PhysicsCategory.water.rawValue, PhysicsCategory.dino.rawValue) {
+            let dino = contact.bodyA.categoryBitMask == PhysicsCategory.dino.rawValue ? contact.bodyA.node : contact.bodyB.node
+            
+            print(dino)
+            
+            if (dino == self.dino3) {
+                self.dino3.removeAllActions()
+                
+                self.moveDino3()
+            }
         }
         
         print(contact.bodyA.categoryBitMask, contact.bodyB.categoryBitMask)
