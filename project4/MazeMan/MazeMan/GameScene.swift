@@ -38,6 +38,7 @@ enum PhysicsCategory : UInt32 {
     case dino = 32
     case immuneDino = 64
     case rock = 128
+    case fire = 256
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -286,6 +287,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.dino4.zPosition = 99
         
         self.moveDino4()
+        
+        self.addFireBall()
+    }
+    
+    func addFireBall() {
+        
+        self.dino4.run(SKAction.wait(forDuration: 7.5, withRange: 2.5)) {
+            let fireball = SKSpriteNode(imageNamed: "fire")
+            
+            self.createBlock(block: fireball, x: Int(self.dino4.position.x), y: Int(self.dino4.position.y), category: PhysicsCategory.fire.rawValue)
+            
+            self.addFireBall()
+            
+            fireball.run(SKAction.move(by: CGVector(dx: 0, dy: -HEIGHT), duration: TimeInterval(WIDTH) * ENEMY_SPEED_UP / TimeInterval(BLOCKSIZE))) {
+                fireball.removeFromParent()
+            }
+        }
     }
     
     func moveDino4() {
@@ -496,7 +514,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.caveman?.physicsBody = SKPhysicsBody(rectangleOf: (self.caveman?.size)!)
         self.caveman?.physicsBody?.affectedByGravity =  false
         self.caveman?.physicsBody?.categoryBitMask = PhysicsCategory.caveman.rawValue
-        self.caveman?.physicsBody?.contactTestBitMask = PhysicsCategory.block.rawValue | PhysicsCategory.water.rawValue | PhysicsCategory.star.rawValue | PhysicsCategory.food.rawValue | PhysicsCategory.dino.rawValue
+        self.caveman?.physicsBody?.contactTestBitMask = PhysicsCategory.block.rawValue | PhysicsCategory.water.rawValue | PhysicsCategory.star.rawValue | PhysicsCategory.food.rawValue | PhysicsCategory.dino.rawValue | PhysicsCategory.fire.rawValue
         self.caveman?.physicsBody?.collisionBitMask = 0
     }
     
@@ -639,6 +657,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             self.removeChildren(in: [dino!])
         }
+        
+        if self.didContact(contact, PhysicsCategory.caveman.rawValue, PhysicsCategory.fire.rawValue) {
+            let fire = contact.bodyA.categoryBitMask == PhysicsCategory.fire.rawValue ? contact.bodyA.node : contact.bodyB.node
+            
+            let _ = self.player.decrementEnergy(100)
+            
+            fire?.removeFromParent()
+        }
+        
+        if self.didContact(contact, PhysicsCategory.rock.rawValue, PhysicsCategory.fire.rawValue) {
+            let fire = contact.bodyA.categoryBitMask == PhysicsCategory.fire.rawValue ? contact.bodyA.node : contact.bodyB.node
+            
+            fire?.removeFromParent()
+        }
     }
     
     func addFood() {
@@ -648,6 +680,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         foodBlock.physicsBody?.affectedByGravity =  false
         foodBlock.physicsBody?.categoryBitMask = PhysicsCategory.food.rawValue
         foodBlock.physicsBody?.contactTestBitMask = PhysicsCategory.dino.rawValue
+        foodBlock.physicsBody?.collisionBitMask = 0
     }
     
     /*
@@ -719,7 +752,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 block.physicsBody = SKPhysicsBody(rectangleOf: block.size)
                 block.physicsBody?.affectedByGravity =  false
                 block.physicsBody?.categoryBitMask = PhysicsCategory.rock.rawValue
-                block.physicsBody?.contactTestBitMask = PhysicsCategory.dino.rawValue
+                block.physicsBody?.contactTestBitMask = PhysicsCategory.dino.rawValue | PhysicsCategory.fire.rawValue
                 block.physicsBody?.collisionBitMask = 0
                 
                 let distance = sqrt(pow(cm.position.x - touchLocation.x, 2.0) + pow(cm.position.y - touchLocation.y, 2.0))
