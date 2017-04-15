@@ -8,6 +8,7 @@
 
 import SpriteKit
 import GameplayKit
+import AVFoundation
 
 let HEIGHT = 1024
 let WIDTH = 1366
@@ -41,7 +42,7 @@ enum PhysicsCategory : UInt32 {
     case fire = 256
 }
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
+class GameScene: SKScene, SKPhysicsContactDelegate, AVAudioPlayerDelegate {
     
     private var caveman : SKSpriteNode?
     
@@ -90,6 +91,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var timer: Timer?
     var gravityTimer: Timer?
+    var audioPlayer = AVAudioPlayer()
     
     func reset() {
         self.blocks = [SKSpriteNode]()
@@ -182,7 +184,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func prepareGravityTime() {
         let time = TimeInterval(arc4random_uniform(UInt32(20))) + 40
-            
+        
         self.gravityTimer = Timer.scheduledTimer(timeInterval: time, target: self, selector: #selector(GameScene.enableGravityTime), userInfo: nil, repeats: false)
     }
     
@@ -409,6 +411,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func playerDied() {
         if !self.transitioning {
+            self.playSound(name: "cave_man_death")
+            
             let transition = SKTransition.reveal(with: SKTransitionDirection.left, duration: 1.0)
             
             let nextScene = GameOverScene(size: (self.scene?.size)!)
@@ -571,6 +575,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let _ = self.player.decrementEnergy(self.player.energy)
             
             self.caveman?.removeAllActions()
+            
+            self.playSound(name: "drown")
         }
         
         if self.didContact(contact, PhysicsCategory.caveman.rawValue, PhysicsCategory.star.rawValue) {
@@ -587,6 +593,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let _ = self.addRandomBlock("star", PhysicsCategory.star.rawValue)
             
             self.statusLabel.text = "You collected a star!"
+            self.playSound(name: "star_get")
         }
         
         if self.didContact(contact, PhysicsCategory.caveman.rawValue, PhysicsCategory.dino.rawValue) {
@@ -609,6 +616,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
             self.statusLabel.text = "Ouch! The dino got you!"
+            self.playSound(name: "cave_man_hit")
         }
         
         if self.didContact(contact, PhysicsCategory.food.rawValue, PhysicsCategory.caveman.rawValue) {
@@ -625,6 +633,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.addFood()
             
             self.statusLabel.text = "Nom Nom Nom"
+            self.playSound(name: "nom_nom_nom")
         }
         
         if self.didContact(contact, PhysicsCategory.food.rawValue, PhysicsCategory.dino.rawValue) {
@@ -640,6 +649,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             
             self.statusLabel.text = "Dino: Nom Nom Nom"
+            
         }
         
         if self.didContact(contact, PhysicsCategory.block.rawValue, PhysicsCategory.dino.rawValue) || self.didContact(contact, PhysicsCategory.water.rawValue, PhysicsCategory.dino.rawValue) {
@@ -681,6 +691,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.removeChildren(in: [dino!])
             
             self.statusLabel.text = "You killed a dino"
+            
+            let name = (GKRandomSource.sharedRandom().arrayByShufflingObjects(in: ["dino_1", "dino_2", "dino_3"]) as! [String])[0]
+            
+            self.playSound(name: name)
         }
         
         if self.didContact(contact, PhysicsCategory.caveman.rawValue, PhysicsCategory.fire.rawValue) {
@@ -794,5 +808,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 block.run(movement)
             }
         }
+    }
+    
+    func playSound(name: String, _ type: String = ".wav") {
+        do{
+            audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: Bundle.main.path(forResource: name, ofType: type)!))
+            
+            audioPlayer.play()
+        }
+        catch{  }
     }
 }

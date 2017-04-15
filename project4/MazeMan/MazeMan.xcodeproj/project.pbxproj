@@ -17,6 +17,14 @@
 		B084D6771E944A3F00F78530 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B084D6761E944A3F00F78530 /* Assets.xcassets */; };
 		B084D67A1E944A3F00F78530 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B084D6781E944A3F00F78530 /* LaunchScreen.storyboard */; };
 		B084D6821E944BFB00F78530 /* GameOverScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = B084D6811E944BFB00F78530 /* GameOverScene.sks */; };
+		B0AAE0CA1EA281130088EB00 /* cave_man_death.wav in Resources */ = {isa = PBXBuildFile; fileRef = B0AAE0C21EA281130088EB00 /* cave_man_death.wav */; };
+		B0AAE0CB1EA281130088EB00 /* cave_man_hit.wav in Resources */ = {isa = PBXBuildFile; fileRef = B0AAE0C31EA281130088EB00 /* cave_man_hit.wav */; };
+		B0AAE0CC1EA281130088EB00 /* dino_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = B0AAE0C41EA281130088EB00 /* dino_1.wav */; };
+		B0AAE0CD1EA281130088EB00 /* dino_2.wav in Resources */ = {isa = PBXBuildFile; fileRef = B0AAE0C51EA281130088EB00 /* dino_2.wav */; };
+		B0AAE0CE1EA281130088EB00 /* dino_3.wav in Resources */ = {isa = PBXBuildFile; fileRef = B0AAE0C61EA281130088EB00 /* dino_3.wav */; };
+		B0AAE0CF1EA281130088EB00 /* drown.wav in Resources */ = {isa = PBXBuildFile; fileRef = B0AAE0C71EA281130088EB00 /* drown.wav */; };
+		B0AAE0D01EA281130088EB00 /* nom_nom_nom.wav in Resources */ = {isa = PBXBuildFile; fileRef = B0AAE0C81EA281130088EB00 /* nom_nom_nom.wav */; };
+		B0AAE0D11EA281130088EB00 /* star_get.wav in Resources */ = {isa = PBXBuildFile; fileRef = B0AAE0C91EA281130088EB00 /* star_get.wav */; };
 		B0FAD4631E9910D300F27371 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FAD4621E9910D300F27371 /* Player.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +41,14 @@
 		B084D6791E944A3F00F78530 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B084D67B1E944A3F00F78530 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B084D6811E944BFB00F78530 /* GameOverScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameOverScene.sks; sourceTree = "<group>"; };
+		B0AAE0C21EA281130088EB00 /* cave_man_death.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = cave_man_death.wav; sourceTree = "<group>"; };
+		B0AAE0C31EA281130088EB00 /* cave_man_hit.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = cave_man_hit.wav; sourceTree = "<group>"; };
+		B0AAE0C41EA281130088EB00 /* dino_1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = dino_1.wav; sourceTree = "<group>"; };
+		B0AAE0C51EA281130088EB00 /* dino_2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = dino_2.wav; sourceTree = "<group>"; };
+		B0AAE0C61EA281130088EB00 /* dino_3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = dino_3.wav; sourceTree = "<group>"; };
+		B0AAE0C71EA281130088EB00 /* drown.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = drown.wav; sourceTree = "<group>"; };
+		B0AAE0C81EA281130088EB00 /* nom_nom_nom.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = nom_nom_nom.wav; sourceTree = "<group>"; };
+		B0AAE0C91EA281130088EB00 /* star_get.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = star_get.wav; sourceTree = "<group>"; };
 		B0FAD4621E9910D300F27371 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Player.swift; path = Model/Player.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -66,6 +82,7 @@
 		B084D6681E944A3F00F78530 /* MazeMan */ = {
 			isa = PBXGroup;
 			children = (
+				B0AAE0C11EA281050088EB00 /* sounds */,
 				B0FAD4641E99114800F27371 /* Model */,
 				B084D6691E944A3F00F78530 /* AppDelegate.swift */,
 				B084D66B1E944A3F00F78530 /* GameScene.sks */,
@@ -80,6 +97,21 @@
 				B016F1A51EA258C1004E4EDF /* GameOverScene.swift */,
 			);
 			path = MazeMan;
+			sourceTree = "<group>";
+		};
+		B0AAE0C11EA281050088EB00 /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				B0AAE0C21EA281130088EB00 /* cave_man_death.wav */,
+				B0AAE0C31EA281130088EB00 /* cave_man_hit.wav */,
+				B0AAE0C41EA281130088EB00 /* dino_1.wav */,
+				B0AAE0C51EA281130088EB00 /* dino_2.wav */,
+				B0AAE0C61EA281130088EB00 /* dino_3.wav */,
+				B0AAE0C71EA281130088EB00 /* drown.wav */,
+				B0AAE0C81EA281130088EB00 /* nom_nom_nom.wav */,
+				B0AAE0C91EA281130088EB00 /* star_get.wav */,
+			);
+			name = sounds;
 			sourceTree = "<group>";
 		};
 		B0FAD4641E99114800F27371 /* Model */ = {
@@ -150,12 +182,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0AAE0CA1EA281130088EB00 /* cave_man_death.wav in Resources */,
 				B084D6751E944A3F00F78530 /* Main.storyboard in Resources */,
+				B0AAE0CB1EA281130088EB00 /* cave_man_hit.wav in Resources */,
 				B084D66C1E944A3F00F78530 /* GameScene.sks in Resources */,
 				B084D6771E944A3F00F78530 /* Assets.xcassets in Resources */,
+				B0AAE0CE1EA281130088EB00 /* dino_3.wav in Resources */,
 				B084D67A1E944A3F00F78530 /* LaunchScreen.storyboard in Resources */,
+				B0AAE0D01EA281130088EB00 /* nom_nom_nom.wav in Resources */,
+				B0AAE0CF1EA281130088EB00 /* drown.wav in Resources */,
 				B084D6821E944BFB00F78530 /* GameOverScene.sks in Resources */,
+				B0AAE0CD1EA281130088EB00 /* dino_2.wav in Resources */,
+				B0AAE0D11EA281130088EB00 /* star_get.wav in Resources */,
 				B084D66E1E944A3F00F78530 /* Actions.sks in Resources */,
+				B0AAE0CC1EA281130088EB00 /* dino_1.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
